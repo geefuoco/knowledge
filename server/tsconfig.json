@@ -1,0 +1,24 @@
+{
+ "compilerOptions": {
+  "rootDir": "src",
+  "outDir": "build",
+  "target": "es6",
+  "allowJs": true,
+  "moduleResolution": "node",
+  "esModuleInterop": true,
+  "module": "commonjs",
+  "sourceMap": true,
+  "allowSyntheticDefaultImports": true,
+  "forceConsistentCasingInFileNames": true,
+  "jsx": "react",
+  "strict": true,
+  "skipLibCheck": true
+ },
+ "include": [
+  "src/**/*"
+ ],
+ "exclude": [
+  "node_modules",
+  "build"
+ ]
+}
