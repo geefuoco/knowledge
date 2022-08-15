@@ -11,9 +11,12 @@ export function createUserPrisma(): UserRepository {
   const prisma = new PrismaClient();
   const SALT = 10;
 
-  async function findById(id: number): UserResult {
+  async function findById(id: number, password = false): UserResult {
     try {
-      return await prisma.user.findFirst({ where: { id } });
+      return await prisma.user.findFirst({
+        where: { id },
+        select: { id: true, email: true, bio: true, password: password }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -22,7 +25,9 @@ export function createUserPrisma(): UserRepository {
 
   async function findAll(): UserResultArray {
     try {
-      return await prisma.user.findMany();
+      return await prisma.user.findMany({
+        select: { id: true, email: true, bio: true, password: false }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -31,7 +36,10 @@ export function createUserPrisma(): UserRepository {
 
   async function findByEmail(email: string): UserResult {
     try {
-      return await prisma.user.findFirst({ where: { email } });
+      return await prisma.user.findFirst({
+        where: { email },
+        select: { email: true, id: true, password: false }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -46,6 +54,12 @@ export function createUserPrisma(): UserRepository {
             gte: start,
             lt: end
           }
+        },
+        select: {
+          id: true,
+          email: true,
+          bio: true,
+          password: false
         }
       });
     } catch (error) {
