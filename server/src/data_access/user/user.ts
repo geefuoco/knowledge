@@ -7,8 +7,7 @@ import type {
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
-export function createUserPrisma(): UserRepository {
-  const prisma = new PrismaClient();
+export function createUserPrisma(prisma: PrismaClient): UserRepository {
   const SALT = 10;
 
   async function findById(id: number, password = false): UserResult {
@@ -90,12 +89,22 @@ export function createUserPrisma(): UserRepository {
     return null;
   }
 
+  async function deleteAll(): Promise<{ count: number } | null> {
+    try {
+      return await prisma.user.deleteMany();
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   return Object.freeze({
     findById,
     findAll,
     findByEmail,
     findByDateBetween,
     create,
-    deleteById
+    deleteById,
+    deleteAll
   });
 }

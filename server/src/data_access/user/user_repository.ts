@@ -25,4 +25,5 @@ export type UserRepository = {
   findByDateBetween: (start: Date, end: Date) => UserResultArray;
   create: (userInfo: UserCreateInfo) => UserResult;
   deleteById: (id: number) => UserResult;
+  deleteAll: () => Promise<{ count: number } | null>;
 };
