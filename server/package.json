@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+		"dev": "nodemon src/server.ts",
     "test": "jest --watch",
     "get-types": "typesync && npm i",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
