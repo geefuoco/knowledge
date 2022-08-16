@@ -67,6 +67,54 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     return null;
   }
 
+  async function getUserLikes(id: number): UserResult {
+    try {
+      return await prisma.user.findFirst({
+        where: {
+          id
+        },
+        include: {
+          likes: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  async function getUserPosts(id: number): UserResult {
+    try {
+      return await prisma.user.findFirst({
+        where: {
+          id
+        },
+        include: {
+          posts: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  async function getUserComments(id: number): UserResult {
+    try {
+      return await prisma.user.findFirst({
+        where: {
+          id
+        },
+        include: {
+          comments: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function create(userInfo: UserCreateInfo): UserResult {
     try {
       const salt = await bcrypt.genSalt(SALT);
@@ -103,6 +151,9 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     findAll,
     findByEmail,
     findByDateBetween,
+    getUserLikes,
+    getUserPosts,
+    getUserComments,
     create,
     deleteById,
     deleteAll

@@ -22,6 +22,7 @@ export type UserRepository = {
   findById: (id: number, password: boolean) => UserResult;
   findAll: () => UserResultArray;
   findByEmail: (email: string) => UserResult;
+  getUserLikes: (id: number) => UserResult;
   findByDateBetween: (start: Date, end: Date) => UserResultArray;
   create: (userInfo: UserCreateInfo) => UserResult;
   deleteById: (id: number) => UserResult;
