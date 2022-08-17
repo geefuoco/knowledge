@@ -7,6 +7,8 @@ export default function createPostRouter(
   const router = Router();
 
   router.get("/post/:id", postController.getPost);
+  router.get("/post/:id/comments", postController.getPostWithComments);
+  router.post("/posts", postController.create);
 
   return router;
 }

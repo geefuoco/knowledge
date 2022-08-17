@@ -5,9 +5,8 @@ import { getIdOrThrow } from "../helpers";
 
 export type PostController = {
   getPost: ExpressCallback;
-  // getPostWithAllComments: ExpressCallback;
-  // getAllPosts: ExpressCallback;
-  // getAllPostsWithComments: ExpressCallback;
+  getPostWithComments: ExpressCallback;
+  create: ExpressCallback;
 };
 
 export default function createPostController(
@@ -16,20 +15,51 @@ export default function createPostController(
   async function getPost(req: Request, res: Response, next: NextFunction) {
     try {
       const id = getIdOrThrow(req);
-      let post = null;
-      const { comments } = req.query;
-      if (comments) {
-        post = await Post.findByIdWithComments(id);
-      } else {
-        post = await Post.findById(id);
-      }
+      const post = await Post.findById(id);
       res.status(200).json(post);
     } catch (error) {
       next(error);
     }
   }
 
+  async function getPostWithComments(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const id = getIdOrThrow(req);
+      const post = await Post.findByIdWithComments(id);
+      res.status(200).json(post);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async function create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { body, user_id } = req.body;
+      if (!body || !user_id) {
+        throw new Error("Invalid parameters. Body and user_id required");
+      }
+      if (body.length > 250) {
+        throw new Error("Body must be less then 250 characters");
+      }
+      const createdAt = new Date(Date.now());
+      const post = await Post.create({
+        body,
+        user_id,
+        createdAt
+      });
+      res.status(201).json(post);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   return Object.freeze({
-    getPost
+    getPost,
+    getPostWithComments,
+    create
   });
 }
