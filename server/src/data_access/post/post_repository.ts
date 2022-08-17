@@ -16,8 +16,10 @@ export type PostResultArray = Promise<Post[] | null>;
 
 export type PostRepository = {
   findById: (id: number) => PostResult;
+  findByIdWithComments: (id: number) => PostResult;
   findAll: () => PostResultArray;
   findByUserId: (userId: number) => PostResultArray;
+  findAllWithComments: () => PostResultArray;
   findBetweenDate: (start: Date, end: Date) => PostResultArray;
   create: (postInfo: PostCreateInfo) => PostResult;
   deleteById: (id: number) => PostResult;

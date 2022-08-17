@@ -16,6 +16,22 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
     return null;
   }
 
+  async function findByIdWithComments(id: number): PostResult {
+    try {
+      return await prisma.post.findFirst({
+        where: {
+          id
+        },
+        include: {
+          comments: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function findByUserId(userId: number): PostResultArray {
     try {
       return await prisma.post.findMany({ where: { user_id: userId } });
@@ -28,6 +44,27 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
   async function findAll(): PostResultArray {
     try {
       return await prisma.post.findMany();
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  async function findAllWithComments(): PostResultArray {
+    try {
+      return await prisma.post.findMany({
+        include: {
+          comments: {
+            include: {
+              children: {
+                include: {
+                  children: true
+                }
+              }
+            }
+          }
+        }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -92,6 +129,8 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
     findById,
     findAll,
     findByUserId,
+    findByIdWithComments,
+    findAllWithComments,
     findBetweenDate,
     create,
     deleteById,
