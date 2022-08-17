@@ -1,11 +1,7 @@
 import type { Response, Request, NextFunction } from "express";
 import type { UserRepository } from "../../data_access/user/user_repository";
-
-type ExpressCallback = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => Promise<void>;
+import type { ExpressCallback } from "../helpers";
+import { getIdOrThrow } from "../helpers";
 
 export type UserController = {
   getUser: ExpressCallback;
@@ -20,11 +16,7 @@ export default function createUserController(
 ): UserController {
   async function getUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = Number(req.params["id"]);
-      if (isNaN(id)) {
-        const error = new Error("Invalid user id");
-        return next(error);
-      }
+      const id = getIdOrThrow(req);
       const user = await User.findById(id, false);
       res.status(200).json(user);
     } catch (error) {
@@ -43,11 +35,7 @@ export default function createUserController(
 
   async function getUserPosts(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = Number(req.params["id"]);
-      if (isNaN(id)) {
-        const error = new Error("Invalid user id");
-        return next(error);
-      }
+      const id = getIdOrThrow(req);
       const users = await User.findByIdWithPosts(id);
       res.status(200).json(users);
     } catch (error) {
@@ -75,11 +63,7 @@ export default function createUserController(
 
   async function deleteUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const id = Number(req.params["id"]);
-      if (isNaN(id)) {
-        const error = new Error("Invalid id");
-        return next(error);
-      }
+      const id = getIdOrThrow(req);
       const user = await User.deleteById(id);
       if (!user) {
         const error = new Error(`User with id ${id} does not exists`);
