@@ -8,6 +8,7 @@ export default function createUserRouter(
 
   router.get("/user/:id", userController.getUser);
   router.get("/users", userController.getUsers);
+  router.get("/user/:id/posts", userController.getUserPosts);
   router.post("/users", userController.createUser);
   router.delete("/user/:id", userController.deleteUser);
 

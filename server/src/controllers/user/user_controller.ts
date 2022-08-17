@@ -12,6 +12,7 @@ export type UserController = {
   getUsers: ExpressCallback;
   createUser: ExpressCallback;
   deleteUser: ExpressCallback;
+  getUserPosts: ExpressCallback;
 };
 
 export default function createUserController(
@@ -34,6 +35,20 @@ export default function createUserController(
   async function getUsers(_: Request, res: Response, next: NextFunction) {
     try {
       const users = await User.findAll();
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async function getUserPosts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params["id"]);
+      if (isNaN(id)) {
+        const error = new Error("Invalid user id");
+        return next(error);
+      }
+      const users = await User.findByIdWithPosts(id);
       res.status(200).json(users);
     } catch (error) {
       next(error);
@@ -119,6 +134,7 @@ export default function createUserController(
   return Object.freeze({
     getUser,
     getUsers,
+    getUserPosts,
     createUser,
     deleteUser
   });

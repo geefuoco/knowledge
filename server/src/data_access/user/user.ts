@@ -33,6 +33,26 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     return null;
   }
 
+  async function findByIdWithPosts(id: number): UserResult {
+    try {
+      return await prisma.user.findFirst({
+        where: {
+          id
+        },
+        include: {
+          posts: {
+            include: {
+              comments: true
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function findByEmail(email: string): UserResult {
     try {
       return await prisma.user.findFirst({
@@ -151,6 +171,7 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     findAll,
     findByEmail,
     findByDateBetween,
+    findByIdWithPosts,
     getUserLikes,
     getUserPosts,
     getUserComments,
