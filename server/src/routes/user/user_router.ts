@@ -1,12 +1,15 @@
 import { Router } from "express";
-import createUserController from "../../controllers/user/user_controller";
-import { UserRepository } from "../../data_access/user/user_repository";
+import type { UserController } from "../../controllers/user/user_controller";
 
-export default function createUserRouter(User: UserRepository): Router {
+export default function createUserRouter(
+  userController: UserController
+): Router {
   const router = Router();
-  const userController = createUserController(User);
 
   router.get("/user/:id", userController.getUser);
+  router.get("/users", userController.getUsers);
+  router.post("/users", userController.createUser);
+  router.delete("/user/:id", userController.deleteUser);
 
   return router;
 }
