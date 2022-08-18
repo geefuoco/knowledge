@@ -1,6 +1,7 @@
-import express, { Response, Request, NextFunction } from "express";
+import express, { Response } from "express";
 import helmet from "helmet";
 import { join } from "path";
+import { errorHandler, notFoundHandler } from "./errors/error_handler";
 import apiRouter from "./routes/routes";
 
 const app = express();
@@ -11,10 +12,8 @@ app.use(express.json());
 
 app.use("/api/v1", apiRouter);
 
-app.use(async (error: Error, _: Request, res: Response, next: NextFunction) => {
-  res.setHeader("Content-Type", "application/json");
-  res.status(400).json({ name: error.name, message: error.message });
-});
+app.use(errorHandler);
+app.use(notFoundHandler);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(join(__dirname, "/dist")));

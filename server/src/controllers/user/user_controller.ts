@@ -1,7 +1,12 @@
-import type { Response, Request, NextFunction } from "express";
+import type { Response, Request } from "express";
 import type { UserRepository } from "../../data_access/user/user_repository";
-import type { ExpressCallback } from "../helpers";
-import { getIdOrThrow } from "../helpers";
+import {
+  parseIdOrThrow,
+  expressWrapper,
+  createTimestamp,
+  ExpressCallback
+} from "../helpers";
+import apiErrors, { StatusCodes } from "../../errors/api_errors";
 
 export type UserController = {
   getUser: ExpressCallback;
@@ -14,82 +19,61 @@ export type UserController = {
 export default function createUserController(
   User: UserRepository
 ): UserController {
-  async function getUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = getIdOrThrow(req);
-      const user = await User.findById(id, false);
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
-    }
+  async function getUser(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const user = await User.findById(id, false);
+    res.status(StatusCodes.OK).json(user);
   }
 
-  async function getUsers(_: Request, res: Response, next: NextFunction) {
-    try {
-      const users = await User.findAll();
-      res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
+  async function getUsers(_: Request, res: Response) {
+    const users = await User.findAll();
+    res.status(StatusCodes.OK).json(users);
   }
 
-  async function getUserPosts(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = getIdOrThrow(req);
-      const users = await User.findByIdWithPosts(id);
-      res.status(200).json(users);
-    } catch (error) {
-      next(error);
-    }
+  async function getUserPosts(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const users = await User.findByIdWithPosts(id);
+    res.status(StatusCodes.OK).json(users);
   }
 
-  async function createUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      validateInput(req);
-      const { email, password, avatar, bio } = req.body;
-      const createdAt = new Date(Date.now());
-      const user = await User.create({
-        email,
-        password,
-        avatar,
-        bio,
-        createdAt
-      });
-      res.status(201).json(user);
-    } catch (error) {
-      next(error);
-    }
+  async function createUser(req: Request, res: Response) {
+    validateInput(req);
+    const { email, password, avatar, bio } = req.body;
+    const createdAt = createTimestamp();
+    const user = await User.create({
+      email,
+      password,
+      avatar,
+      bio,
+      createdAt
+    });
+    res.status(StatusCodes.CREATED).json(user);
   }
 
-  async function deleteUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = getIdOrThrow(req);
-      const user = await User.deleteById(id);
-      if (!user) {
-        const error = new Error(`User with id ${id} does not exists`);
-        return next(error);
-      }
-      res.status(200).json(user);
-    } catch (error) {
-      next(error);
+  async function deleteUser(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const user = await User.deleteById(id);
+    if (!user) {
+      throw apiErrors.createNotFoundError();
     }
+    res.status(StatusCodes.OK).json(user);
   }
 
   function validateInput(req: Request) {
     const { email, password, avatar, bio } = req.body;
 
     if (!email || !password) {
-      throw new Error("Please supply an email and password");
+      throw apiErrors.createInvalidRequestError();
     }
 
     if (!isValidEmail(email)) {
-      throw new Error("Invalid email");
+      throw apiErrors.createInvalidEmailError();
     }
     if (bio && bio.length > 250) {
-      throw new Error("Bio length is longer than 250 characters");
+      throw apiErrors.createInvalidContentLengthError();
     }
     if (avatar && typeof avatar !== "string") {
-      throw new Error("Invalid avatar image link");
+      throw apiErrors.createInvalidRequestError();
     }
   }
 
@@ -116,10 +100,10 @@ export default function createUserController(
   }
 
   return Object.freeze({
-    getUser,
-    getUsers,
-    getUserPosts,
-    createUser,
-    deleteUser
+    getUser: expressWrapper(getUser),
+    getUsers: expressWrapper(getUsers),
+    getUserPosts: expressWrapper(getUserPosts),
+    createUser: expressWrapper(createUser),
+    deleteUser: expressWrapper(deleteUser)
   });
 }

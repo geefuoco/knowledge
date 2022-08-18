@@ -8,7 +8,7 @@ export default function createPostRouter(
 
   router.get("/post/:id", postController.getPost);
   router.get("/post/:id/comments", postController.getPostWithComments);
-  router.post("/posts", postController.create);
+  router.post("/posts", postController.createPost);
 
   return router;
 }
