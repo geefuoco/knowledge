@@ -13,6 +13,7 @@ export type PostController = {
   getPost: ExpressCallback;
   getPostWithComments: ExpressCallback;
   createPost: ExpressCallback;
+  deletePost: ExpressCallback;
 };
 
 export default function createPostController(
@@ -53,9 +54,19 @@ export default function createPostController(
     res.status(StatusCodes.CREATED).json(post);
   }
 
+  async function deletePost(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const post = await Post.deleteById(id);
+    if (!post) {
+      throw apiErrors.createNotFoundError();
+    }
+    res.status(StatusCodes.OK).json(post);
+  }
+
   return Object.freeze({
     getPost: expressWrapper(getPost),
     getPostWithComments: expressWrapper(getPostWithComments),
-    createPost: expressWrapper(createPost)
+    createPost: expressWrapper(createPost),
+    deletePost: expressWrapper(deletePost)
   });
 }
