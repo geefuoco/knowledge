@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 import { createUserPrisma } from "../data_access/user/user";
 import createUserRouter from "./user/user_router";
@@ -12,22 +12,54 @@ import createPostController from "../controllers/post/post_controller";
 import { createCommentPrisma } from "../data_access/comment/comment";
 import createCommentRouter from "./comment/comment_router";
 import createCommentController from "../controllers/comment/comment_controller";
-import { continueRoute } from "../controllers/helpers";
+import {
+  continueRoute,
+  authenticateRoute,
+  logoutUser
+} from "../controllers/helpers";
+import { createPassportStrategy } from "../config/passport";
 
-const router = Router();
-const client = new PrismaClient();
+export function createApiRouter(client: PrismaClient): Router {
+  const router = Router();
 
-const User = createUserPrisma(client);
-const Post = createPostPrisma(client);
-const Comment = createCommentPrisma(client);
+  const User = createUserPrisma(client);
+  const Post = createPostPrisma(client);
+  const Comment = createCommentPrisma(client);
 
-const userRouter = createUserRouter(createUserController(User));
-const postRouter = createPostRouter(createPostController(Post));
-const commentRouter = createCommentRouter(createCommentController(Comment));
+  const userController = createUserController(User);
+  const postController = createPostController(Post);
+  const commentController = createCommentController(Comment);
 
-router.use(userRouter);
-router.use(postRouter);
-router.use(commentRouter);
-router.use(continueRoute);
+  const userRouter = createUserRouter(userController);
+  const postRouter = createPostRouter(postController);
+  const commentRouter = createCommentRouter(commentController);
 
-export default router;
+  router.use(authenticateRoute, userRouter);
+  router.use(authenticateRoute, postRouter);
+  router.use(authenticateRoute, commentRouter);
+  router.use(continueRoute);
+
+  return router;
+}
+
+export function createPassportRouter(client: PrismaClient): Router {
+  const passport = createPassportStrategy(client);
+  const router = Router();
+  const User = createUserPrisma(client);
+  const userController = createUserController(User);
+
+  router.use(passport.initialize());
+  router.use(passport.session());
+
+  router.post(
+    "/login",
+    passport.authenticate("local", {
+      failureRedirect: "/login",
+      successRedirect: "/"
+    })
+  );
+
+  router.post("/logout", logoutUser);
+  router.post("/register", userController.createUser);
+  return router;
+}
