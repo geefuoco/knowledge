@@ -14,6 +14,7 @@ export type UserController = {
   createUser: ExpressCallback;
   deleteUser: ExpressCallback;
   getUserPosts: ExpressCallback;
+  loginUser: ExpressCallback;
 };
 
 export default function createUserController(
@@ -36,9 +37,25 @@ export default function createUserController(
     res.status(StatusCodes.OK).json(users);
   }
 
+  async function loginUser(req: Request, res: Response) {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw apiErrors.createInvalidCredentialsError();
+    }
+    const user = await User.login(email, password);
+    if (!user) {
+      throw apiErrors.createInvalidCredentialsError();
+    }
+    res.status(StatusCodes.OK).json(user);
+  }
+
   async function createUser(req: Request, res: Response) {
     validateInput(req);
     const { email, password, avatar, bio } = req.body;
+    const oldUser = await User.findByEmail(email);
+    if (oldUser) {
+      throw apiErrors.createUserExistsError();
+    }
     const createdAt = createTimestamp();
     const user = await User.create({
       email,
@@ -104,6 +121,7 @@ export default function createUserController(
     getUsers: expressWrapper(getUsers),
     getUserPosts: expressWrapper(getUserPosts),
     createUser: expressWrapper(createUser),
-    deleteUser: expressWrapper(deleteUser)
+    deleteUser: expressWrapper(deleteUser),
+    loginUser: expressWrapper(loginUser)
   });
 }
