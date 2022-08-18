@@ -28,4 +28,5 @@ export type UserRepository = {
   create: (userInfo: UserCreateInfo) => UserResult;
   deleteById: (id: number) => UserResult;
   deleteAll: () => Promise<{ count: number } | null>;
+  login: (email: string, password: string) => UserResult;
 };

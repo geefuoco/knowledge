@@ -82,7 +82,7 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
         }
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
     return null;
   }
@@ -148,6 +148,25 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     return null;
   }
 
+  async function login(email: string, password: string): UserResult {
+    try {
+      const user = await prisma.user.findFirst({
+        where: { email }
+      });
+      if (!user) {
+        return null;
+      }
+      const valid = await bcrypt.compare(password, user.password);
+      if (!valid) {
+        return null;
+      }
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function deleteById(id: number): UserResult {
     try {
       return await prisma.user.delete({ where: { id } });
@@ -177,6 +196,7 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
     getUserComments,
     create,
     deleteById,
-    deleteAll
+    deleteAll,
+    login
   });
 }
