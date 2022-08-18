@@ -56,3 +56,10 @@ model Like {
 	comment_id Int?
 	post_id Int?
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}
