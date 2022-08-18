@@ -20,7 +20,8 @@ export enum APIErrorMessages {
   FORBIDDEN = "Current user is not authorzied to access this resource.",
   INVALID_CONTENT_LENGTH = "Invalid content length. Max length is 250 characters.",
   INVALID_CREDENTIALS = "Invalid email or password provided",
-  INVALID_EMAIL = "Invalid email address. Please use a real email."
+  INVALID_EMAIL = "Invalid email address. Please use a real email.",
+  EMAIL_EXISTS = "The email is already in use. Please use a different email"
 }
 
 export enum StatusCodes {
@@ -87,6 +88,10 @@ function createApiErrors() {
     );
   }
 
+  function createUserExistsError(): APIError {
+    return new APIError(StatusCodes.BAD_REQUEST, APIErrorMessages.EMAIL_EXISTS);
+  }
+
   return Object.freeze({
     createInvalidIdError,
     createNotFoundError,
@@ -96,7 +101,8 @@ function createApiErrors() {
     createForbiddenError,
     createInvalidEmailError,
     createInvalidContentLengthError,
-    createInvalidCredentialsError
+    createInvalidCredentialsError,
+    createUserExistsError
   });
 }
 
