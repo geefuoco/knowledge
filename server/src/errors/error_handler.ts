@@ -27,7 +27,7 @@ export async function notFoundHandler(
   res.setHeader("Content-Type", "application/json");
   const err = {
     statusCode: StatusCodes.NOT_FOUND,
-    message: "Reource not found"
+    message: "Resource not found"
   };
   res.status(StatusCodes.NOT_FOUND).json(err);
 }

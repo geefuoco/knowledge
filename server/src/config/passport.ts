@@ -1,10 +1,8 @@
 import type { User, UserRepository } from "../data_access/user/user_repository";
 import type { PassportStatic } from "passport";
-import type { PrismaClient } from "@prisma/client";
 import passportLocal from "passport-local";
 import passport from "passport";
 
-import { createUserPrisma } from "../data_access/user/user";
 import apiErrors from "../errors/api_errors";
 
 function createVerifyCallback(User: UserRepository) {
@@ -21,9 +19,8 @@ function createVerifyCallback(User: UserRepository) {
   };
 }
 
-export function createPassportStrategy(client: PrismaClient): PassportStatic {
+export function createPassportStrategy(User: UserRepository): PassportStatic {
   const LocalStrategy = passportLocal.Strategy;
-  const User = createUserPrisma(client);
   passport.serializeUser(async (user: User, done: Function) => {
     done(null, user.email);
   });

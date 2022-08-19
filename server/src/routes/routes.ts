@@ -1,15 +1,14 @@
 import { Router } from "express";
-import type { PrismaClient } from "@prisma/client";
+import type { UserRepository } from "../data_access/user/user_repository";
+import type { PostRepository } from "../data_access/post/post_repository";
+import type { CommentRepository } from "../data_access/comment/comment_repository";
 
-import { createUserPrisma } from "../data_access/user/user";
 import createUserRouter from "./user/user_router";
 import createUserController from "../controllers/user/user_controller";
 
-import { createPostPrisma } from "../data_access/post/post";
 import createPostRouter from "./post/post_router";
 import createPostController from "../controllers/post/post_controller";
 
-import { createCommentPrisma } from "../data_access/comment/comment";
 import createCommentRouter from "./comment/comment_router";
 import createCommentController from "../controllers/comment/comment_controller";
 import {
@@ -19,12 +18,13 @@ import {
 } from "../controllers/helpers";
 import { createPassportStrategy } from "../config/passport";
 
-export function createApiRouter(client: PrismaClient): Router {
+export function createApiRouter(repositories: {
+  User: UserRepository;
+  Post: PostRepository;
+  Comment: CommentRepository;
+}): Router {
   const router = Router();
-
-  const User = createUserPrisma(client);
-  const Post = createPostPrisma(client);
-  const Comment = createCommentPrisma(client);
+  const { User, Post, Comment } = repositories;
 
   const userController = createUserController(User);
   const postController = createPostController(Post);
@@ -42,10 +42,9 @@ export function createApiRouter(client: PrismaClient): Router {
   return router;
 }
 
-export function createPassportRouter(client: PrismaClient): Router {
-  const passport = createPassportStrategy(client);
+export function createPassportRouter(User: UserRepository): Router {
+  const passport = createPassportStrategy(User);
   const router = Router();
-  const User = createUserPrisma(client);
   const userController = createUserController(User);
 
   router.use(passport.initialize());
