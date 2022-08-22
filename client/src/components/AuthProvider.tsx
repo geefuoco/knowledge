@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext, HttpError } from "../context/AuthContext";
 import { loginToServer } from "../api/login";
-import { storeLocalUser, removeLocalUser } from "../api/localStore";
+import {
+  storeLocalUser,
+  removeLocalUser,
+  getLocalUser,
+} from "../api/localStore";
 
 type AuthProps = {
   children: React.ReactNode;
 };
 
 const AuthProvider: React.FC<AuthProps> = ({ children }) => {
-  const [user, setUser] = useState<number | null>(null);
+  const [user, setUser] = useState<number | null>(getLocalUser());
+
+  useEffect(() => {
+    if (user) {
+      storeLocalUser(user);
+    }
+  }, [user]);
 
   const handleLogin = async (
     email: string,
@@ -20,7 +30,6 @@ const AuthProvider: React.FC<AuthProps> = ({ children }) => {
         return response;
       }
       setUser(response.id);
-      storeLocalUser(response.id);
     }
     return null;
   };

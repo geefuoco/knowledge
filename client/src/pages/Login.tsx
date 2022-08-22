@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Form, { FormErrors } from "../components/Form";
 import TextInput from "../components/Input";
@@ -19,6 +19,13 @@ const Login: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
+  useEffect(() => {
+    console.log("render");
+    if (user) {
+      navigate("/", { replace: true });
+    }
+  }, [errors, user]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const emailInput = email.current;
@@ -31,16 +38,13 @@ const Login: React.FC = () => {
     }
 
     const error = await onLogin(emailInput.value, passwordInput.value);
-    console.log(error);
 
     button.disabled = true;
     if (error) {
-      setErrors(() => {
-        return { ...errors, testing: "testing" };
-      });
-      console.log(errors);
+      setErrors({ ...errors, message: error.message });
+      button.disabled = false;
+      return;
     }
-    button.disabled = false;
     navigate("/", { replace: true });
   };
 
@@ -68,9 +72,6 @@ const Login: React.FC = () => {
             placeholder="example@email.com"
           />
         </div>
-        {errors && errors["email"] && (
-          <span className="text-red-500 font-bold">{errors["email"]}</span>
-        )}
         <div className="flex justify-between gap-10">
           <label htmlFor="password" className={labelClasses}>
             Password

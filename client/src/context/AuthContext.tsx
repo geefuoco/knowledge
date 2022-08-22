@@ -1,10 +1,9 @@
 import { createContext } from "react";
-import { getLocalUser } from "../api/localStore";
 
 type ContextType = {
   onLogin: (email: string, password: string) => Promise<HttpError | null>;
   onLogout: () => void;
-  user: number | null;
+  user: (() => number | null) | number | null;
 };
 
 export type HttpError = {
@@ -16,5 +15,5 @@ export type HttpError = {
 export const AuthContext = createContext<ContextType>({
   onLogin: () => Promise.resolve(null),
   onLogout: () => undefined,
-  user: getLocalUser(),
+  user: null,
 });
