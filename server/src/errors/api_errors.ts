@@ -21,7 +21,8 @@ export enum APIErrorMessages {
   INVALID_CONTENT_LENGTH = "Invalid content length. Max length is 250 characters.",
   INVALID_CREDENTIALS = "Invalid email or password provided",
   INVALID_EMAIL = "Invalid email address. Please use a real email.",
-  EMAIL_EXISTS = "The email is already in use. Please use a different email"
+  EMAIL_EXISTS = "The email is already in use. Please use a different email",
+  INVALID_PASS_LENGTH = "Password must be at least 6 characters"
 }
 
 export enum StatusCodes {
@@ -33,7 +34,8 @@ export enum StatusCodes {
   CREATED = 201,
   REDIRECT = 301,
   TOO_MANY_REQUESTS = 429,
-  SERVER_ERROR = 500
+  SERVER_ERROR = 500,
+  NO_CONTENT = 204
 }
 
 function createApiErrors() {
@@ -92,6 +94,13 @@ function createApiErrors() {
     return new APIError(StatusCodes.BAD_REQUEST, APIErrorMessages.EMAIL_EXISTS);
   }
 
+  function createInvalidPasswordLength(): APIError {
+    return new APIError(
+      StatusCodes.BAD_REQUEST,
+      APIErrorMessages.INVALID_PASS_LENGTH
+    );
+  }
+
   return Object.freeze({
     createInvalidIdError,
     createNotFoundError,
@@ -102,7 +111,8 @@ function createApiErrors() {
     createInvalidEmailError,
     createInvalidContentLengthError,
     createInvalidCredentialsError,
-    createUserExistsError
+    createUserExistsError,
+    createInvalidPasswordLength
   });
 }
 

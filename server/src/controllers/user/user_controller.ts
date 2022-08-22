@@ -8,6 +8,8 @@ import {
 } from "../helpers";
 import apiErrors, { StatusCodes } from "../../errors/api_errors";
 
+const MIN_PASSWORD_LENGTH = 6;
+
 export type UserController = {
   getUser: ExpressCallback;
   getUsers: ExpressCallback;
@@ -86,6 +88,10 @@ export default function createUserController(
 
     if (!email || !password) {
       throw apiErrors.createInvalidRequestError();
+    }
+
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      throw apiErrors.createInvalidPasswordLength();
     }
 
     if (!isValidEmail(email)) {

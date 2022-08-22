@@ -18,7 +18,8 @@ const client = new PrismaClient();
 
 const corsOptions = {
   origin: config.CLIENT,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  credentials: true
 };
 
 const User = createUserPrisma(client);

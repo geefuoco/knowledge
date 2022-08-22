@@ -41,7 +41,7 @@ export function logoutUser(req: Request, res: Response, next: NextFunction) {
     if (error) {
       return next(error);
     }
-    res.redirect("/");
+    res.status(StatusCodes.NO_CONTENT).end();
   });
 }
 
