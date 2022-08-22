@@ -31,6 +31,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <h1>Users</h1>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </AuthProvider>
   );

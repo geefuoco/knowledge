@@ -12,12 +12,20 @@ const Navbar: React.FC = () => {
       </div>
       <div className="basis-1/2 flex justify-end">
         {!user ? (
-          <Link
-            to="/login"
-            className="py-2 px-3 text-lg bg-slate-600 rounded-lg"
-          >
-            Login
-          </Link>
+          <div className="flex gap-8">
+            <Link
+              to="/login"
+              className="py-2 px-3 text-lg bg-slate-600 rounded-lg"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="py-2 px-3 text-lg bg-slate-600 rounded-lg"
+            >
+              Sign up
+            </Link>
+          </div>
         ) : (
           <button
             onClick={onLogout}

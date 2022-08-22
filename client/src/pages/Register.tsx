@@ -1,17 +1,26 @@
 import { FormEvent, useRef, useState } from "react";
-import Form, { FormErrors } from "../components/Form";
+import { useNavigate, Navigate } from "react-router-dom";
+import { registerUser } from "../api/register";
+import Form from "../components/Form";
 import TextInput from "../components/Input";
+import { useAuth } from "../hooks/useAuth";
 
 const labelClasses = "text-xl font-bold text-white drop-shadow";
 
 const Register: React.FC = () => {
+  const navigate = useNavigate();
   const email = useRef<HTMLInputElement | null>(null);
   const password = useRef<HTMLInputElement | null>(null);
   const confirmPassword = useRef<HTMLInputElement | null>(null);
   const submit = useRef<HTMLButtonElement | null>(null);
-  const [errors, setErrors] = useState<FormErrors>({});
+  const [errors, setErrors] = useState<string[]>([]);
+  const { user, onLogin } = useAuth();
 
-  const handleSubmit = (e: FormEvent) => {
+  if (user) {
+    return <Navigate to="/" replace />;
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const emailInput = email.current;
     const passwordInput = password.current;
@@ -26,16 +35,22 @@ const Register: React.FC = () => {
     button.disabled = true;
 
     if (passwordInput.value !== confirmPasswordInput.value) {
-      console.log("Passwords dont match");
-      setErrors({
-        password: "Passwords don't match",
-        confirmPassword: "Passwords don't match",
-        ...errors,
-      });
+      setErrors(["Passwords don't match", ...errors]);
+      button.disabled = false;
       return;
     }
-    setErrors({});
-    button.disabled = false;
+
+    const status = await registerUser(emailInput.value, passwordInput.value);
+    if (status === 201) {
+      const error = await onLogin(emailInput.value, passwordInput.value);
+      if (error) {
+        setErrors([
+          ...errors,
+          "There was a problem logging in after sign up. Please logging in at the login form",
+        ]);
+      }
+      navigate("/", { replace: true });
+    }
   };
 
   return (
@@ -62,9 +77,6 @@ const Register: React.FC = () => {
             placeholder="example@email.com"
           />
         </div>
-        {errors && errors["email"] && (
-          <span className="text-red-500 font-bold">{errors["email"]}</span>
-        )}
         <div className="flex justify-between gap-10">
           <label htmlFor="password" className={labelClasses}>
             Password
@@ -76,9 +88,6 @@ const Register: React.FC = () => {
             name="password"
           />
         </div>
-        {errors && errors["password"] && (
-          <span className="text-red-500 font-bold">{errors["password"]}</span>
-        )}
         <div className="flex justify-between gap-10">
           <label htmlFor="confirm-password" className={labelClasses}>
             Confirm Password
@@ -90,11 +99,12 @@ const Register: React.FC = () => {
             name="confirm-password"
           />
         </div>
-        {errors && errors["confirmPassword"] && (
-          <span className="text-red-500 font-bold">
-            {errors["confirmPassword"]}
-          </span>
-        )}
+        {errors &&
+          errors.map((msg, idx) => (
+            <span className="text-red-500 font-bold" key={idx}>
+              {msg}
+            </span>
+          ))}
         <button
           className="rounded-md py-4 px-8 bg-blue-400 text-xl text-white hover:bg-blue-300 transition ease-in-out duration-200"
           type="submit"

@@ -1,24 +1,18 @@
-const SERVER = "http://192.168.2.210:5000";
-
-type User = {
-  id: number;
-  email: string;
-  password?: string;
-  bio?: string;
-  avatar?: string;
-};
+import type { User } from "../config/types";
+import { config } from "../config/config";
 
 export async function loginToServer(
   email: string,
   password: string
 ): Promise<User | null> {
   try {
-    const response = await fetch(`${SERVER}/login`, {
+    const response = await fetch(`${config.SERVER}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
+      credentials: "include",
     });
     return response.json();
   } catch (error) {

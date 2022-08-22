@@ -6,6 +6,7 @@ import {
   removeLocalUser,
   getLocalUser,
 } from "../api/localStore";
+import { logoutUser } from "../api/logout";
 
 type AuthProps = {
   children: React.ReactNode;
@@ -34,7 +35,8 @@ const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     return null;
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logoutUser();
     setUser(null);
     removeLocalUser();
   };
