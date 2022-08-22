@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import type { UserRepository } from "../data_access/user/user_repository";
 import type { PostRepository } from "../data_access/post/post_repository";
 import type { CommentRepository } from "../data_access/comment/comment_repository";
@@ -17,6 +17,7 @@ import {
   logoutUser
 } from "../controllers/helpers";
 import { createPassportStrategy } from "../config/passport";
+import { StatusCodes } from "../errors/api_errors";
 
 export function createApiRouter(repositories: {
   User: UserRepository;
@@ -53,9 +54,11 @@ export function createPassportRouter(User: UserRepository): Router {
   router.post(
     "/login",
     passport.authenticate("local", {
-      failureRedirect: "/login",
-      successRedirect: "/"
-    })
+      failureRedirect: "/login"
+    }),
+    (req: Request, res: Response) => {
+      res.status(StatusCodes.OK).json(req.user);
+    }
   );
 
   router.post("/logout", logoutUser);

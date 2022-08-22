@@ -10,7 +10,7 @@ function createVerifyCallback(User: UserRepository) {
     try {
       const user = await User.login(username, password);
       if (!user) {
-        return done(apiErrors.createNotFoundError());
+        return done(apiErrors.createInvalidCredentialsError());
       }
       return done(null, user);
     } catch (error) {

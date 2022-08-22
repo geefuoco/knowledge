@@ -42,7 +42,12 @@ export default function createUserController(
     if (!email || !password) {
       throw apiErrors.createInvalidCredentialsError();
     }
+    console.log("querying database");
     const user = await User.login(email, password);
+    console.log("done");
+    if (user) {
+      console.log("user is found in controller");
+    }
     if (!user) {
       throw apiErrors.createInvalidCredentialsError();
     }

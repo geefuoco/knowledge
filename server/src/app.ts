@@ -1,5 +1,6 @@
 import express, { Response } from "express";
 import helmet from "helmet";
+import cors from "cors";
 import { join } from "path";
 import { PrismaClient } from "@prisma/client";
 
@@ -10,15 +11,22 @@ import { authenticateRoute, testingRoute } from "./controllers/helpers";
 import { createUserPrisma } from "./data_access/user/user";
 import { createPostPrisma } from "./data_access/post/post";
 import { createCommentPrisma } from "./data_access/comment/comment";
+import config from "./config/config";
 
 const app = express();
 const client = new PrismaClient();
+
+const corsOptions = {
+  origin: config.CLIENT,
+  optionsSuccessStatus: 200
+};
 
 const User = createUserPrisma(client);
 const Post = createPostPrisma(client);
 const Comment = createCommentPrisma(client);
 
 app.use(helmet());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(createSessionMiddleware(client));
 app.use(createPassportRouter(User));

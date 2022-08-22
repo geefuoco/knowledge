@@ -29,7 +29,9 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
 
   async function findByUserId(userId: number): CommentResultArray {
     try {
-      return await prisma.comment.findMany({ where: { user_id: userId } });
+      return await prisma.comment.findMany({
+        where: { user_id: userId }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -38,7 +40,9 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
 
   async function findByParentId(parentId: number): CommentResult {
     try {
-      return await prisma.comment.findFirst({ where: { parent_id: parentId } });
+      return await prisma.comment.findFirst({
+        where: { parent_id: parentId }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -112,7 +116,9 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
     userId: number
   ): Promise<{ count: number } | null> {
     try {
-      return await prisma.comment.deleteMany({ where: { user_id: userId } });
+      return await prisma.comment.deleteMany({
+        where: { user_id: userId }
+      });
     } catch (error) {
       console.error(error);
     }
