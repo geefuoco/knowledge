@@ -1,19 +1,17 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import AuthProvider from "./components/AuthProvider";
 import Navbar from "./components/Navbar";
 import { useAuth } from "./hooks/useAuth";
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+const ProtectedRoute: React.FC = () => {
   const { user } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  return <>{children}</>;
+  return <Outlet />;
 };
 
 function App() {
@@ -23,22 +21,10 @@ function App() {
       <Routes>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <h1>Authorized Route</h1>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/users"
-          element={
-            <ProtectedRoute>
-              <h1>Users</h1>
-            </ProtectedRoute>
-          }
-        />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<h1>Authorized Route</h1>} />
+          <Route path="/users" element={<h1>Users</h1>} />
+        </Route>
       </Routes>
     </AuthProvider>
   );
