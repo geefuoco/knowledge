@@ -23,7 +23,20 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
           id
         },
         include: {
-          comments: true
+          comments: {
+            include: {
+              user: {
+                select: {
+                  email: true
+                }
+              }
+            }
+          },
+          user: {
+            select: {
+              email: true
+            }
+          }
         }
       });
     } catch (error) {
@@ -64,6 +77,9 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
             }
           },
           comments: {
+            orderBy: {
+              createdAt: "desc"
+            },
             include: {
               user: {
                 select: {
