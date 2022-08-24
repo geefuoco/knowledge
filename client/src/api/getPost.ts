@@ -1,11 +1,10 @@
+import type { Post } from "../config/types";
 import { config } from "../config/config";
 
-import type { Post } from "../config/types";
-
-export async function getPosts(pageNumber: number): Promise<Post[] | null> {
+export async function getPost(id: number): Promise<Post | null> {
   try {
     const response = await fetch(
-      `${config.SERVER}/api/v1/posts?page=${pageNumber}`,
+      `${config.SERVER}/api/v1/post/${id}/comments`,
       {
         credentials: "include",
         headers: {
@@ -13,7 +12,6 @@ export async function getPosts(pageNumber: number): Promise<Post[] | null> {
         },
       }
     );
-
     return await response.json();
   } catch (error) {
     console.error(error);

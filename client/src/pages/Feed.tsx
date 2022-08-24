@@ -1,0 +1,45 @@
+import { useState } from "react";
+
+import type { Post } from "../config/types";
+import { getPosts } from "../api/getPosts";
+import { useAsync } from "../hooks/useAsync";
+import PostItem from "../components/PostItem";
+
+const Feed: React.FC = () => {
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const {
+    loading,
+    error,
+    value: posts,
+  } = useAsync(() => getPosts(pageNumber), [pageNumber]);
+
+  if (loading) {
+    return <h1>Loading</h1>;
+  }
+
+  if (error) {
+    return (
+      <h1 className="text-xl text-center">Oops ! Could not load any posts</h1>
+    );
+  }
+
+  const postsDisplay =
+    posts &&
+    posts.length > 0 &&
+    posts.map((post: Post) => {
+      return (
+        <PostItem
+          id={post.id}
+          key={post.id}
+          email={post.user.email}
+          body={post.body}
+          createdAt={post.createdAt}
+          comments={post.comments}
+        />
+      );
+    });
+
+  return <main className="container w-2/3 mx-auto h-full">{postsDisplay}</main>;
+};
+
+export default Feed;

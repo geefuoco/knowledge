@@ -20,7 +20,6 @@ const Login: React.FC = () => {
   }
 
   useEffect(() => {
-    console.log("render");
     if (user) {
       navigate("/", { replace: true });
     }

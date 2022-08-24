@@ -1,5 +1,6 @@
+import type { HttpError } from "../config/types";
 import { useEffect, useState } from "react";
-import { AuthContext, HttpError } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext";
 import { loginToServer } from "../api/login";
 import {
   storeLocalUser,
