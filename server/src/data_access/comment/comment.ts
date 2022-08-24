@@ -12,13 +12,6 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
       return await prisma.comment.findFirst({
         where: {
           id
-        },
-        include: {
-          children: {
-            include: {
-              children: true
-            }
-          }
         }
       });
     } catch (error) {
@@ -54,13 +47,6 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
       return await prisma.comment.findMany({
         where: {
           post_id: postId
-        },
-        include: {
-          children: {
-            include: {
-              children: true
-            }
-          }
         }
       });
     } catch (error) {

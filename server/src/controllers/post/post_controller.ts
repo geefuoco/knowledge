@@ -11,6 +11,7 @@ import apiErrors, { StatusCodes } from "../../errors/api_errors";
 
 export type PostController = {
   getPost: ExpressCallback;
+  getAllPosts: ExpressCallback;
   getPostWithComments: ExpressCallback;
   createPost: ExpressCallback;
   deletePost: ExpressCallback;
@@ -63,7 +64,20 @@ export default function createPostController(
     res.status(StatusCodes.OK).json(post);
   }
 
+  async function getAllPosts(req: Request, res: Response) {
+    const page = Number(req.query["page"]);
+    if (isNaN(page)) {
+      throw apiErrors.createInvalidRequestError();
+    }
+    const posts = await Post.findAllWithComments(page);
+    if (!posts) {
+      throw apiErrors.createNotFoundError();
+    }
+    res.status(StatusCodes.OK).json(posts);
+  }
+
   return Object.freeze({
+    getAllPosts: expressWrapper(getAllPosts),
     getPost: expressWrapper(getPost),
     getPostWithComments: expressWrapper(getPostWithComments),
     createPost: expressWrapper(createPost),

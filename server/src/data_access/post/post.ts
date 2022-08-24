@@ -50,19 +50,31 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
     return null;
   }
 
-  async function findAllWithComments(): PostResultArray {
+  async function findAllWithComments(page: number): PostResultArray {
+    const perPage = 20;
+    const skip = page > 1 ? page * perPage : 0;
     try {
       return await prisma.post.findMany({
+        take: perPage,
+        skip,
         include: {
+          user: {
+            select: {
+              email: true
+            }
+          },
           comments: {
             include: {
-              children: {
-                include: {
-                  children: true
+              user: {
+                select: {
+                  email: true
                 }
               }
             }
           }
+        },
+        orderBy: {
+          createdAt: "desc"
         }
       });
     } catch (error) {
