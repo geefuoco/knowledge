@@ -160,6 +160,7 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
       if (!valid) {
         return null;
       }
+      user.password = "";
       return user;
     } catch (error) {
       console.error(error);

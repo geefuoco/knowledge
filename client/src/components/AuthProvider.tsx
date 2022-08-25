@@ -1,4 +1,4 @@
-import type { HttpError } from "../config/types";
+import type { User, HttpError } from "../config/types";
 import { useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { loginToServer } from "../api/login";
@@ -14,7 +14,7 @@ type AuthProps = {
 };
 
 const AuthProvider: React.FC<AuthProps> = ({ children }) => {
-  const [user, setUser] = useState<number | null>(getLocalUser());
+  const [user, setUser] = useState<User | null>(getLocalUser());
 
   useEffect(() => {
     if (user) {
@@ -31,7 +31,7 @@ const AuthProvider: React.FC<AuthProps> = ({ children }) => {
       if ("message" in response) {
         return response;
       }
-      setUser(response.id);
+      setUser(response);
     }
     return null;
   };

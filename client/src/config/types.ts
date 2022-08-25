@@ -28,7 +28,7 @@ export type Post = {
 export type AuthContextType = {
   onLogin: (email: string, password: string) => Promise<HttpError | null>;
   onLogout: () => void;
-  user: number | null;
+  user: User | null;
 };
 
 export type HttpError = {

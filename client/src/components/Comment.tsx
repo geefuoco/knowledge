@@ -33,12 +33,12 @@ const CommentComponent: React.FC<CommentProps> = ({
       if (!current) {
         return;
       }
-      const comment = await replyToComment(id, post.id, user, current.value);
+      const comment = await replyToComment(id, post.id, user.id, current.value);
 
       if (!comment) {
         return;
       }
-      console.log(comment);
+      comment.user = user;
       createNewComment(comment);
     } else {
       console.error("Error: Could not find the user or post");
