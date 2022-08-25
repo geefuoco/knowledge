@@ -14,9 +14,11 @@ const Post: React.FC = () => {
   return (
     <main className="container mx-auto h-full shadow-lg">
       <div className="p-4">
-        <div className="font-bold text-2xl">{post.user.email}</div>
+        <div className=" flex justify-between">
+          <div className="font-bold text-2xl">{post.user.email}</div>
+          <div className="pt-2">{time}</div>
+        </div>
         <div className="text-xl">{post.body}</div>
-        <div className="text-l">{time}</div>
       </div>
       <section>
         {getRootComments &&

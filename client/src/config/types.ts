@@ -28,7 +28,7 @@ export type Post = {
 export type AuthContextType = {
   onLogin: (email: string, password: string) => Promise<HttpError | null>;
   onLogout: () => void;
-  user: (() => number | null) | number | null;
+  user: number | null;
 };
 
 export type HttpError = {
@@ -41,6 +41,7 @@ export type PostContextType = {
   post: Post | null;
   getReplies: (arg: number) => Comment[];
   getRootComments: Comment[];
+  createNewComment: (comment: Comment) => void;
 };
 
 export type CommentGroup = {

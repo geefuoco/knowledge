@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import type { Comment, Post, CommentGroup } from "../config/types";
+import { useMemo, useState, useEffect } from "react";
+import type { Comment, CommentGroup } from "../config/types";
 import { useParams } from "react-router-dom";
 import { PostContext } from "../context/PostContext";
 import { useAsync } from "../hooks/useAsync";
@@ -14,19 +14,30 @@ const PostProvider: React.FC<{ children: React.ReactNode }> = ({
     error,
     value: post,
   } = useAsync(() => getPost(Number(id)), [id]);
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const commentsByParentId = useMemo(() => {
     const group: CommentGroup = {};
-    (post as Post)?.comments?.forEach((comment) => {
+    comments.forEach((comment) => {
       const key = comment.parent_id?.toString() || "root";
       group[key] ||= new Array<Comment>();
       group[key].push(comment);
     });
     return group;
+  }, [comments]);
+
+  useEffect(() => {
+    if (post?.comments) {
+      setComments(post.comments);
+    }
   }, [post?.comments]);
 
   function getReplies(parentId: number) {
     return commentsByParentId[parentId];
+  }
+
+  function createNewComment(comment: Comment) {
+    setComments([comment, ...comments]);
   }
 
   let result;
@@ -42,6 +53,7 @@ const PostProvider: React.FC<{ children: React.ReactNode }> = ({
     post,
     getReplies,
     getRootComments: commentsByParentId["root"],
+    createNewComment,
   };
 
   return (

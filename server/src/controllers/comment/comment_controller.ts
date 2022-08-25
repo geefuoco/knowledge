@@ -27,7 +27,7 @@ export default function createCommentController(
   }
 
   async function createComment(req: Request, res: Response) {
-    const { body, user_id, post_id, parent_id } = req.body.params;
+    const { body, user_id, post_id, parent_id } = req.body;
     if (!body || !user_id || !post_id) {
       throw apiErrors.createInvalidRequestError();
     }
