@@ -38,7 +38,7 @@ const Post: React.FC = () => {
 
   return (
     <main className="container mx-auto lg:w-2/3 mb-2">
-      <div className="p-4">
+      <div className="p-4 bg-gray-200">
         <div className=" flex justify-between">
           <div className="font-bold text-xl md:text-2xl">{post.user.email}</div>
           <div className="pt-2 text-sm">{time}</div>

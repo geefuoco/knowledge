@@ -19,7 +19,7 @@ const PostItem: React.FC<PostProps> = ({
 }) => {
   const time = dateFormatter.format(Date.parse(createdAt));
   return (
-    <div className="pl-3 pt-3 shadow-md">
+    <div className="pl-3 pt-3 shadow-md  bg-gray-200 border-b-2 border-b-gray-300">
       <div className="flex justify-between">
         <div className="text-xl p-3 font-bold">{email}</div>
         <div className="p-3">{time}</div>
