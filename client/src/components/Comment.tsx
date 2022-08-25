@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { dateFormatter } from "../config/helpers";
 import { usePost } from "../hooks/usePost";
 import { useAuth } from "../hooks/useAuth";
@@ -24,8 +24,6 @@ const CommentComponent: React.FC<CommentProps> = ({
   const time = dateFormatter.format(Date.parse(createdAt));
   const replyRef = useRef<HTMLTextAreaElement | null>(null);
 
-  useEffect(() => {}, [childComments]);
-
   async function handleReply() {
     setShowReply(false);
     if (post && user) {
@@ -46,20 +44,22 @@ const CommentComponent: React.FC<CommentProps> = ({
   }
 
   return (
-    <div className="shadow-md pl-2 pt-2 border-l-slate-200 border-l-2">
-      <div className="flex justify-between">
-        <div className="text-xl font-bold px-2">{email}</div>
-        <div className="px-2">{time}</div>
-      </div>
-      <div className="pl-2 text-l">{body}</div>
-      <div className="flex justify-end p-2">
-        <div className="px-2">
-          <span
-            className="font-bold cursor-pointer"
-            onClick={() => setShowReply(!showReply)}
-          >
-            Reply
-          </span>
+    <div className="pl-2 pt-2">
+      <div className="p-2 border-slate-500 border-2 rounded-md">
+        <div className="flex justify-between">
+          <div className="text-md md:text-xl font-bold px-2">{email}</div>
+          <div className="px-2 text-sm">{time}</div>
+        </div>
+        <div className="pl-2 text-md md:text-l">{body}</div>
+        <div className="flex justify-end p-2">
+          <div className="px-2">
+            <span
+              className="font-bold cursor-pointer"
+              onClick={() => setShowReply(!showReply)}
+            >
+              Reply
+            </span>
+          </div>
         </div>
       </div>
       <section>

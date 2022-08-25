@@ -5,6 +5,7 @@ const defaultContext = {
   post: null,
   getReplies: () => new Array<Comment>(),
   getRootComments: new Array<Comment>(),
+  createNewComment: (comment: Comment) => {},
 };
 
 export const PostContext = createContext<PostContextType>(defaultContext);

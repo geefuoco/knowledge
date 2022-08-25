@@ -26,7 +26,7 @@ const PostItem: React.FC<PostProps> = ({
       </div>
       <div className="text-l pl-3">{body}</div>
       <div className="flex justify-end gap-10">
-        <div className="p-2">
+        <div className="p-3">
           {comments && (
             <span className="font-semibold">
               <Link to={`/post/${id}`}>Comments: {comments.length}</Link>

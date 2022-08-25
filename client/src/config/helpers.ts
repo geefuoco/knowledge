@@ -1,5 +1,5 @@
 const options: Intl.DateTimeFormatOptions = {
-  month: "short",
+  month: "numeric",
   day: "numeric",
   year: "numeric",
   hour12: true,

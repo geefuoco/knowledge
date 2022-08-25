@@ -1,9 +1,15 @@
+import { useState, useRef } from "react";
 import { dateFormatter } from "../config/helpers";
 import CommentComponent from "../components/Comment";
 import { usePost } from "../hooks/usePost";
+import { useAuth } from "../hooks/useAuth";
+import { replyToPost } from "../api/replyToPost";
 
 const Post: React.FC = () => {
-  const { post, getRootComments } = usePost();
+  const [showReply, setShowReply] = useState(false);
+  const { post, getRootComments, createNewComment } = usePost();
+  const { user } = useAuth();
+  const replyRef = useRef<HTMLTextAreaElement | null>(null);
 
   if (!post) {
     return <h1>Error loading post</h1>;
@@ -11,16 +17,62 @@ const Post: React.FC = () => {
 
   const time = dateFormatter.format(Date.parse(post.createdAt));
 
+  async function handleReply() {
+    setShowReply(false);
+    if (post && user) {
+      const { current } = replyRef;
+      if (!current) {
+        return;
+      }
+      const comment = await replyToPost(post.id, user.id, current.value);
+
+      if (!comment) {
+        return;
+      }
+      comment.user = user;
+      createNewComment(comment);
+    } else {
+      console.error("Error: Could not find the user or post");
+    }
+  }
+
   return (
-    <main className="container mx-auto h-full shadow-lg">
+    <main className="container mx-auto lg:w-2/3 mb-2">
       <div className="p-4">
         <div className=" flex justify-between">
-          <div className="font-bold text-2xl">{post.user.email}</div>
-          <div className="pt-2">{time}</div>
+          <div className="font-bold text-xl md:text-2xl">{post.user.email}</div>
+          <div className="pt-2 text-sm">{time}</div>
         </div>
-        <div className="text-xl">{post.body}</div>
+        <div className="text-l md:text-xl">{post.body}</div>
+        <div className="flex justify-end p-2">
+          <div className="px-2">
+            <span
+              className="font-bold cursor-pointer"
+              onClick={() => setShowReply(!showReply)}
+            >
+              Reply
+            </span>
+          </div>
+        </div>
       </div>
-      <section>
+      <section className="p-1">
+        {showReply && (
+          <div className="p-2">
+            <textarea
+              className="block text-sm border-slate-100 border-2 w-full my-2"
+              rows={4}
+              ref={replyRef}
+            />
+            <div className="flex justify-end">
+              <button
+                className="p-2 text-md bg-blue-500 text-white rounded-md transition ease-in-out duration-200 hover:bg-blue-400"
+                onClick={handleReply}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        )}
         {getRootComments &&
           getRootComments.length > 0 &&
           getRootComments.map((comment) => {

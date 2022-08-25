@@ -37,7 +37,7 @@ const PostProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   function createNewComment(comment: Comment) {
-    setComments([comment, ...comments]);
+    setComments([...comments, comment]);
   }
 
   let result;
