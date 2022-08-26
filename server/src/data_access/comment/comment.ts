@@ -5,8 +5,12 @@ import type {
   CommentRepository
 } from "./comment_repository";
 import { PrismaClient } from "@prisma/client";
+import { ProfanityFilter } from "../../config/config";
 
-export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
+export function createCommentPrisma(
+  prisma: PrismaClient,
+  profanityFilter: ProfanityFilter
+): CommentRepository {
   async function findById(id: number): CommentResult {
     try {
       return await prisma.comment.findFirst({
@@ -73,6 +77,10 @@ export function createCommentPrisma(prisma: PrismaClient): CommentRepository {
 
   async function create(commentInfo: CommentCreateInfo): CommentResult {
     try {
+      const isInvalid = profanityFilter(commentInfo.body);
+      if (isInvalid) {
+        return null;
+      }
       return await prisma.comment.create({ data: commentInfo });
     } catch (error) {
       console.error(error);

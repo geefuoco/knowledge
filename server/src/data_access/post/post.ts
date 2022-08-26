@@ -4,9 +4,13 @@ import type {
   PostResult,
   PostResultArray
 } from "./post_repository";
+import type { ProfanityFilter } from "../../config/config";
 import { PrismaClient } from "@prisma/client";
 
-export function createPostPrisma(prisma: PrismaClient): PostRepository {
+export function createPostPrisma(
+  prisma: PrismaClient,
+  profanityFilter: ProfanityFilter
+): PostRepository {
   async function findById(id: number): PostResult {
     try {
       return await prisma.post.findFirst({ where: { id } });
@@ -117,6 +121,10 @@ export function createPostPrisma(prisma: PrismaClient): PostRepository {
 
   async function create(postInfo: PostCreateInfo): PostResult {
     try {
+      const isInvalid = profanityFilter(postInfo.body);
+      if (isInvalid) {
+        return null;
+      }
       return await prisma.post.create({ data: postInfo });
     } catch (error) {
       console.error(error);

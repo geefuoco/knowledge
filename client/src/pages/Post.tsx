@@ -28,7 +28,8 @@ const Post: React.FC = () => {
       }
       const comment = await replyToPost(post.id, user.id, current.value);
 
-      if (!comment) {
+      if (!comment || "message" in comment) {
+        createToast("Error: Could not post reply", "danger", true);
         return;
       }
       comment.user = user;
@@ -43,7 +44,7 @@ const Post: React.FC = () => {
   return (
     <main className="container mx-auto lg:w-2/5 mb-2">
       <div className="p-4 bg-gray-200 rounded-md">
-        <div className=" flex justify-between">
+        <div className=" flex justify-between gap-8">
           <div className="font-bold text-xl md:text-2xl">{post.user.email}</div>
           <div className="pt-2 text-sm">{time}</div>
         </div>

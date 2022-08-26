@@ -17,7 +17,7 @@ export async function registerUser(email: string, password: string) {
       body: JSON.stringify(data),
     });
 
-    return response.status;
+    return await response.json();
   } catch (error) {
     console.error(error);
   }

@@ -42,6 +42,9 @@ export default function createCommentController(
       parent_id: parent_id ?? null,
       createdAt
     });
+    if (!comment) {
+      throw apiErrors.createBadInputError();
+    }
     res.status(StatusCodes.CREATED).json(comment);
   }
 

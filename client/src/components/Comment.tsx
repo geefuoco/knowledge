@@ -3,6 +3,7 @@ import { dateFormatter } from "../config/helpers";
 import { usePost } from "../hooks/usePost";
 import { useAuth } from "../hooks/useAuth";
 import { replyToComment } from "../api/replyToComment";
+import { useToast } from "../hooks/useToast";
 
 type CommentProps = {
   id: number;
@@ -20,6 +21,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [showReplyButton, setShowReplyButton] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   const { getReplies, post, createNewComment } = usePost();
+  const { createToast } = useToast();
   const { user } = useAuth();
   const childComments = getReplies(id);
   const time = dateFormatter.format(Date.parse(createdAt));
@@ -34,13 +36,16 @@ const CommentComponent: React.FC<CommentProps> = ({
       }
       const comment = await replyToComment(id, post.id, user.id, current.value);
 
-      if (!comment) {
+      if (!comment || "message" in comment) {
+        createToast("Error: could not create comment.", "danger", true);
         return;
       }
       comment.user = user;
       createNewComment(comment);
+      createToast("Created comment.", "success", true);
     } else {
       console.error("Error: Could not find the user or post");
+      createToast("Error: could not create comment.", "danger", true);
     }
   }
 

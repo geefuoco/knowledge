@@ -101,6 +101,10 @@ function createApiErrors() {
     );
   }
 
+  function createBadInputError(): APIError {
+    return new APIError(StatusCodes.BAD_REQUEST, APIErrorMessages.BAD_REQUEST);
+  }
+
   return Object.freeze({
     createInvalidIdError,
     createNotFoundError,
@@ -112,7 +116,8 @@ function createApiErrors() {
     createInvalidContentLengthError,
     createInvalidCredentialsError,
     createUserExistsError,
-    createInvalidPasswordLength
+    createInvalidPasswordLength,
+    createBadInputError
   });
 }
 

@@ -6,8 +6,12 @@ import type {
 } from "./user_repository";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { ProfanityFilter } from "../../config/config";
 
-export function createUserPrisma(prisma: PrismaClient): UserRepository {
+export function createUserPrisma(
+  prisma: PrismaClient,
+  profanityFilter: ProfanityFilter
+): UserRepository {
   const SALT = 10;
 
   async function findById(id: number, password = false): UserResult {
@@ -137,6 +141,11 @@ export function createUserPrisma(prisma: PrismaClient): UserRepository {
 
   async function create(userInfo: UserCreateInfo): UserResult {
     try {
+      const isInvalidEmail = profanityFilter(userInfo.email);
+      const isInvalidBio = profanityFilter(userInfo.bio ?? "");
+      if (isInvalidEmail || isInvalidBio) {
+        return null;
+      }
       const salt = await bcrypt.genSalt(SALT);
       const hashedPassword = await bcrypt.hash(userInfo["password"], salt);
       return await prisma.user.create({

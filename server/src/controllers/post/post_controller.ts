@@ -52,6 +52,9 @@ export default function createPostController(
       user_id,
       createdAt
     });
+    if (!post) {
+      throw apiErrors.createBadInputError();
+    }
     res.status(StatusCodes.CREATED).json(post);
   }
 

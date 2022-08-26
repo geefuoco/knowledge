@@ -71,6 +71,10 @@ export default function createUserController(
       bio,
       createdAt
     });
+    if (!user) {
+      throw apiErrors.createBadInputError();
+    }
+    user.password = "";
     res.status(StatusCodes.CREATED).json(user);
   }
 

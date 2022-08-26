@@ -40,8 +40,8 @@ const Register: React.FC = () => {
       return;
     }
 
-    const status = await registerUser(emailInput.value, passwordInput.value);
-    if (status === 201) {
+    const user = await registerUser(emailInput.value, passwordInput.value);
+    if (user && !("message" in user)) {
       const error = await onLogin(emailInput.value, passwordInput.value);
       if (error) {
         setErrors([
@@ -50,6 +50,9 @@ const Register: React.FC = () => {
         ]);
       }
       navigate("/", { replace: true });
+    } else {
+      setErrors([...errors, user.message]);
+      button.disabled = false;
     }
   };
 

@@ -1,4 +1,4 @@
-const options: Intl.DateTimeFormatOptions = {
+const dateFormatterOptions: Intl.DateTimeFormatOptions = {
   month: "short",
   day: "numeric",
   year: "numeric",
@@ -7,4 +7,7 @@ const options: Intl.DateTimeFormatOptions = {
   minute: "numeric",
 };
 
-export const dateFormatter = new Intl.DateTimeFormat(undefined, options);
+export const dateFormatter = new Intl.DateTimeFormat(
+  undefined,
+  dateFormatterOptions
+);

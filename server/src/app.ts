@@ -11,7 +11,7 @@ import { authenticateRoute, testingRoute } from "./controllers/helpers";
 import { createUserPrisma } from "./data_access/user/user";
 import { createPostPrisma } from "./data_access/post/post";
 import { createCommentPrisma } from "./data_access/comment/comment";
-import config from "./config/config";
+import config, { createProfanityFilter } from "./config/config";
 
 const app = express();
 const client = new PrismaClient();
@@ -22,9 +22,10 @@ const corsOptions = {
   credentials: true
 };
 
-const User = createUserPrisma(client);
-const Post = createPostPrisma(client);
-const Comment = createCommentPrisma(client);
+const filter = createProfanityFilter();
+const User = createUserPrisma(client, filter);
+const Post = createPostPrisma(client, filter);
+const Comment = createCommentPrisma(client, filter);
 
 app.use(helmet());
 app.use(cors(corsOptions));

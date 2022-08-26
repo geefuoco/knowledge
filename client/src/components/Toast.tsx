@@ -68,7 +68,7 @@ const Toast: React.FC<ToastProps> = ({
 
 const ToastContainer: React.FC<ToastContainerProps> = ({ messages }) => {
   return (
-    <div className="fixed bottom-1 right-1 w-1/2 md:w-2/12 flex flex-col-reverse gap-2">
+    <div className="fixed bottom-1 right-1 w-1/2 md:w-1/4 lg:w-1/6 flex flex-col-reverse gap-2">
       {messages.map((prop, id) => {
         return <Toast key={id} {...prop} />;
       })}

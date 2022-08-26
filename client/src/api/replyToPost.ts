@@ -29,6 +29,6 @@ export async function replyToPost(
     return await response.json();
   } catch (error) {
     console.error(error);
+    return null;
   }
-  return null;
 }
