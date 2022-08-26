@@ -21,8 +21,8 @@ const PostItem: React.FC<PostProps> = ({
   return (
     <div className="pl-3 pt-3 shadow-md  bg-gray-200 border-b-2 border-b-gray-300">
       <div className="flex justify-between">
-        <div className="text-xl p-3 font-bold">{email}</div>
-        <div className="p-3">{time}</div>
+        <div className="text-md md:text-xl p-3 font-bold">{email}</div>
+        <div className="text-sm p-3">{time}</div>
       </div>
       <div className="text-l pl-3">{body}</div>
       <div className="flex justify-end gap-10">
