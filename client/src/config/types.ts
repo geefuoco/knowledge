@@ -31,6 +31,21 @@ export type AuthContextType = {
   user: User | null;
 };
 
+export type ToastContextType = {
+  toasts: ToastProps[] | null;
+  createToast: (message: string, type: ToastType, autoClose: boolean) => void;
+  removeToast: (id: number) => void;
+};
+
+export type ToastType = "danger" | "info" | "success" | "warning";
+
+export type ToastProps = {
+  id: number;
+  message: string;
+  type: ToastType;
+  autoClose?: boolean;
+};
+
 export type HttpError = {
   statusCode: number;
   name: string;

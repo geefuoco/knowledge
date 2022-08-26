@@ -3,12 +3,14 @@ import { dateFormatter } from "../config/helpers";
 import CommentComponent from "../components/Comment";
 import { usePost } from "../hooks/usePost";
 import { useAuth } from "../hooks/useAuth";
+import { useToast } from "../hooks/useToast";
 import { replyToPost } from "../api/replyToPost";
 
 const Post: React.FC = () => {
   const [showReply, setShowReply] = useState(false);
   const { post, getRootComments, createNewComment } = usePost();
   const { user } = useAuth();
+  const { createToast } = useToast();
   const replyRef = useRef<HTMLTextAreaElement | null>(null);
 
   if (!post) {
@@ -31,14 +33,16 @@ const Post: React.FC = () => {
       }
       comment.user = user;
       createNewComment(comment);
+      createToast("Comment Successfully created!", "success", true);
     } else {
       console.error("Error: Could not find the user or post");
+      createToast("Error: Could not post reply", "danger", true);
     }
   }
 
   return (
-    <main className="container mx-auto lg:w-2/3 mb-2">
-      <div className="p-4 bg-gray-200">
+    <main className="container mx-auto lg:w-2/5 mb-2">
+      <div className="p-4 bg-gray-200 rounded-md">
         <div className=" flex justify-between">
           <div className="font-bold text-xl md:text-2xl">{post.user.email}</div>
           <div className="pt-2 text-sm">{time}</div>

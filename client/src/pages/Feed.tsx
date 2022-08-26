@@ -39,7 +39,7 @@ const Feed: React.FC = () => {
       );
     });
 
-  return <main className="container md:w-2/3 mx-auto ">{postsDisplay}</main>;
+  return <main className="container md:w-2/5 mx-auto ">{postsDisplay}</main>;
 };
 
 export default Feed;
