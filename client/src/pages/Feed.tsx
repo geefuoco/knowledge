@@ -14,7 +14,11 @@ const Feed: React.FC = () => {
   } = useAsync(() => getPosts(pageNumber), [pageNumber]);
 
   if (loading) {
-    return <h1>Loading</h1>;
+    return (
+      <h1 className="container mx-auto font-bold text-center text-xl">
+        Loading
+      </h1>
+    );
   }
 
   if (error) {
@@ -31,7 +35,7 @@ const Feed: React.FC = () => {
         <PostItem
           id={post.id}
           key={post.id}
-          email={post.user.email}
+          username={post.user.username}
           body={post.body}
           createdAt={post.createdAt}
           comments={post.comments}

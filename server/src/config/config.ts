@@ -13,8 +13,13 @@ export function createProfanityFilter(): ProfanityFilter {
     text = text.toLowerCase();
     for (let word of badWords) {
       word = word.toLowerCase();
+      if (word === "") {
+        continue;
+      }
       if (text === word || text.includes(word)) {
         result = true;
+        console.log("text: ", text);
+        console.log("bad word: ", word);
         break;
       }
     }

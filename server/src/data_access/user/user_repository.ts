@@ -8,6 +8,7 @@ export type User = {
 };
 
 export type UserCreateInfo = {
+  username: string;
   email: string;
   password: string;
   createdAt: Date;

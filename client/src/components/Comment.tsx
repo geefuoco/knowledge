@@ -7,14 +7,14 @@ import { useToast } from "../hooks/useToast";
 
 type CommentProps = {
   id: number;
-  email: string;
+  username: string;
   body: string;
   createdAt: string;
 };
 
 const CommentComponent: React.FC<CommentProps> = ({
   id,
-  email,
+  username,
   body,
   createdAt,
 }) => {
@@ -58,7 +58,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         <CommentComponent
           id={comment.id}
           key={comment.id}
-          email={comment.user?.email}
+          username={comment.user?.username}
           body={comment.body}
           createdAt={comment.createdAt}
         />
@@ -79,7 +79,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     <div className="pl-2 md:pl-8 pt-2 border-l-2 border-gray-300">
       <div className="p-2 border-slate-500 border-2 rounded-md">
         <div className="flex justify-between">
-          <div className="text-sm md:text-l font-bold px-2">{email}</div>
+          <div className="text-sm md:text-l font-bold px-2">{username}</div>
           <div className="px-2 text-xs md:text-sm">{time}</div>
         </div>
         <div className="pl-2 text-md md:text-l">{body}</div>

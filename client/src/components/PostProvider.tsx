@@ -42,7 +42,11 @@ const PostProvider: React.FC<{ children: React.ReactNode }> = ({
 
   let result;
   if (loading) {
-    result = <h1>Loading..</h1>;
+    result = (
+      <h1 className="container mx-auto font-bold text-center text-xl">
+        Loading
+      </h1>
+    );
   } else if (error) {
     result = <h1>{error}</h1>;
   } else {

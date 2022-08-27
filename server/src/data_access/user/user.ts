@@ -18,7 +18,13 @@ export function createUserPrisma(
     try {
       return await prisma.user.findFirst({
         where: { id },
-        select: { id: true, email: true, bio: true, password: password }
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          bio: true,
+          password: password
+        }
       });
     } catch (error) {
       console.error(error);
@@ -29,7 +35,13 @@ export function createUserPrisma(
   async function findAll(): UserResultArray {
     try {
       return await prisma.user.findMany({
-        select: { id: true, email: true, bio: true, password: false }
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          bio: true,
+          password: false
+        }
       });
     } catch (error) {
       console.error(error);
@@ -61,7 +73,7 @@ export function createUserPrisma(
     try {
       return await prisma.user.findFirst({
         where: { email },
-        select: { email: true, id: true, password: false }
+        select: { username: true, email: true, id: true, password: false }
       });
     } catch (error) {
       console.error(error);
@@ -80,6 +92,7 @@ export function createUserPrisma(
         },
         select: {
           id: true,
+          username: true,
           email: true,
           bio: true,
           password: false
@@ -141,9 +154,10 @@ export function createUserPrisma(
 
   async function create(userInfo: UserCreateInfo): UserResult {
     try {
-      const isInvalidEmail = profanityFilter(userInfo.email);
-      const isInvalidBio = profanityFilter(userInfo.bio ?? "");
-      if (isInvalidEmail || isInvalidBio) {
+      const hasProfanityInEmail = profanityFilter(userInfo.email);
+      const hasProfanityInBio = profanityFilter(userInfo.bio ?? "");
+      const hasProfanityInUsername = profanityFilter(userInfo.username);
+      if (hasProfanityInEmail || hasProfanityInBio || hasProfanityInUsername) {
         return null;
       }
       const salt = await bcrypt.genSalt(SALT);

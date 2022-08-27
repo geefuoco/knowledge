@@ -31,14 +31,14 @@ export function createPostPrisma(
             include: {
               user: {
                 select: {
-                  email: true
+                  username: true
                 }
               }
             }
           },
           user: {
             select: {
-              email: true
+              username: true
             }
           }
         }
@@ -77,7 +77,7 @@ export function createPostPrisma(
         include: {
           user: {
             select: {
-              email: true
+              username: true
             }
           },
           comments: {
@@ -87,7 +87,7 @@ export function createPostPrisma(
             include: {
               user: {
                 select: {
-                  email: true
+                  username: true
                 }
               }
             }
@@ -121,8 +121,8 @@ export function createPostPrisma(
 
   async function create(postInfo: PostCreateInfo): PostResult {
     try {
-      const isInvalid = profanityFilter(postInfo.body);
-      if (isInvalid) {
+      const hasProfanity = profanityFilter(postInfo.body);
+      if (hasProfanity) {
         return null;
       }
       return await prisma.post.create({ data: postInfo });

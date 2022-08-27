@@ -45,7 +45,9 @@ const Post: React.FC = () => {
     <main className="container mx-auto lg:w-2/5 mb-2">
       <div className="p-4 bg-gray-200 rounded-md">
         <div className=" flex justify-between gap-8">
-          <div className="font-bold text-xl md:text-2xl">{post.user.email}</div>
+          <div className="font-bold text-xl md:text-2xl">
+            {post.user.username}
+          </div>
           <div className="pt-2 text-sm">{time}</div>
         </div>
         <div className="text-l md:text-xl">{post.body}</div>
@@ -85,7 +87,7 @@ const Post: React.FC = () => {
               <CommentComponent
                 id={comment.id}
                 key={comment.id}
-                email={comment.user.email}
+                username={comment.user.username}
                 body={comment.body}
                 createdAt={comment.createdAt}
               />

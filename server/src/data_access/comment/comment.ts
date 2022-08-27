@@ -77,8 +77,8 @@ export function createCommentPrisma(
 
   async function create(commentInfo: CommentCreateInfo): CommentResult {
     try {
-      const isInvalid = profanityFilter(commentInfo.body);
-      if (isInvalid) {
+      const hasProfanity = profanityFilter(commentInfo.body);
+      if (hasProfanity) {
         return null;
       }
       return await prisma.comment.create({ data: commentInfo });

@@ -1,4 +1,8 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
+const SALT = bcrypt.genSaltSync(10);
+//This might not work if genSalt is not pseudorandom
 
 const client = new PrismaClient();
 
@@ -8,8 +12,9 @@ const client = new PrismaClient();
 
   const user1 = await client.user.create({
     data: {
+      username: "Marilyn",
       email: "marilyn@gmail.com",
-      password: "a good password",
+      password: bcrypt.hashSync("a good password", SALT),
       createdAt: new Date(2022, 3, 25),
       avatar: null,
       bio: "Marilyn the photographer"
@@ -18,8 +23,9 @@ const client = new PrismaClient();
 
   const user2 = await client.user.create({
     data: {
+      username: "rocko",
       email: "rocko@gmail.com",
-      password: "a bad password",
+      password: bcrypt.hashSync("a bad password", SALT),
       createdAt: new Date(Date.now()),
       avatar: null,
       bio: "the fighter"

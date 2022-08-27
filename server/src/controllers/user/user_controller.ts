@@ -58,13 +58,14 @@ export default function createUserController(
 
   async function createUser(req: Request, res: Response) {
     validateInput(req);
-    const { email, password, avatar, bio } = req.body;
+    const { username, email, password, avatar, bio } = req.body;
     const oldUser = await User.findByEmail(email);
     if (oldUser) {
       throw apiErrors.createUserExistsError();
     }
     const createdAt = createTimestamp();
     const user = await User.create({
+      username,
       email,
       password,
       avatar,
