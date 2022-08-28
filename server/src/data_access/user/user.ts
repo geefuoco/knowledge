@@ -55,8 +55,14 @@ export function createUserPrisma(
         where: {
           id
         },
-        include: {
+        select: {
+          username: true,
+          bio: true,
+          avatar: true,
           posts: {
+            orderBy: {
+              createdAt: "desc"
+            },
             include: {
               comments: true
             }

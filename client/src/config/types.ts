@@ -5,6 +5,8 @@ export type User = {
   password?: string;
   bio?: string;
   avatar?: string;
+  posts?: Post[];
+  comments?: Comment[];
 };
 
 export type Comment = {

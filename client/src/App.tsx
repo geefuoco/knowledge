@@ -10,6 +10,8 @@ import Feed from "./pages/Feed";
 import Post from "./pages/Post";
 
 import { useAuth } from "./hooks/useAuth";
+import UserProfile from "./pages/UserProfile";
+import PersonalProfile from "./pages/PersonalProfile";
 
 const ProtectedRoute: React.FC = () => {
   const { user } = useAuth();
@@ -42,6 +44,8 @@ const App = () => {
                 </PostProvider>
               }
             />
+            <Route path="/user/:id" element={<UserProfile />} />
+            <Route path="/profile" element={<PersonalProfile />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
