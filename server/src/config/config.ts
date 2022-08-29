@@ -12,10 +12,10 @@ export function createProfanityFilter(): ProfanityFilter {
     let result = false;
     text = text.toLowerCase();
     for (let word of badWords) {
-      word = word.toLowerCase();
       if (word === "") {
         continue;
       }
+      word = word.toLowerCase();
       if (text === word || text.includes(word)) {
         result = true;
         console.log("text: ", text);

@@ -25,17 +25,26 @@ export default function createUserController(
   async function getUser(req: Request, res: Response) {
     const id = parseIdOrThrow(req);
     const user = await User.findById(id, false);
+    if (!user) {
+      throw apiErrors.createNotFoundError();
+    }
     res.status(StatusCodes.OK).json(user);
   }
 
   async function getUsers(_: Request, res: Response) {
     const users = await User.findAll();
+    if (!users) {
+      throw apiErrors.createNotFoundError();
+    }
     res.status(StatusCodes.OK).json(users);
   }
 
   async function getUserPosts(req: Request, res: Response) {
     const id = parseIdOrThrow(req);
     const users = await User.findByIdWithPosts(id);
+    if (!users) {
+      throw apiErrors.createNotFoundError();
+    }
     res.status(StatusCodes.OK).json(users);
   }
 
@@ -44,12 +53,7 @@ export default function createUserController(
     if (!email || !password) {
       throw apiErrors.createInvalidCredentialsError();
     }
-    console.log("querying database");
     const user = await User.login(email, password);
-    console.log("done");
-    if (user) {
-      console.log("user is found in controller");
-    }
     if (!user) {
       throw apiErrors.createInvalidCredentialsError();
     }
@@ -89,10 +93,14 @@ export default function createUserController(
   }
 
   function validateInput(req: Request) {
-    const { email, password, avatar, bio } = req.body;
+    const { email, password, username, avatar, bio } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !username) {
       throw apiErrors.createInvalidRequestError();
+    }
+
+    if (username.length < 3) {
+      throw apiErrors.createInvalidContentLengthError();
     }
 
     if (password.length < MIN_PASSWORD_LENGTH) {
