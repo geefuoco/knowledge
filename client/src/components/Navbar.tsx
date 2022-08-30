@@ -97,9 +97,11 @@ const Navbar: React.FC = () => {
             <div className="py-1 px-4 bg-white rounded-sm"></div>
           </button>
         </div>
-        <div className="hidden md:block basis-1/3">
-          <Search />
-        </div>
+        {user && (
+          <div className="hidden md:block basis-1/3">
+            <Search />
+          </div>
+        )}
         <div className="basis-1/3 flex-grow justify-end hidden md:flex">
           {!user ? (
             <div className="flex gap-8">
