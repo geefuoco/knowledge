@@ -1,5 +1,6 @@
 export type User = {
   id?: number;
+  username?: string;
   email?: string;
   password?: string;
   bio?: string | null;
@@ -23,6 +24,7 @@ export type UserRepository = {
   findById: (id: number, password: boolean) => UserResult;
   findAll: () => UserResultArray;
   findByEmail: (email: string) => UserResult;
+  findByUsername: (username: string) => UserResultArray;
   findByIdWithPosts: (id: number) => UserResult;
   getUserLikes: (id: number) => UserResult;
   findByDateBetween: (start: Date, end: Date) => UserResultArray;

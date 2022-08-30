@@ -64,7 +64,11 @@ export function createUserPrisma(
               createdAt: "desc"
             },
             include: {
-              comments: true
+              _count: {
+                select: {
+                  comments: true
+                }
+              }
             }
           }
         }
@@ -80,6 +84,32 @@ export function createUserPrisma(
       return await prisma.user.findFirst({
         where: { email },
         select: { username: true, email: true, id: true, password: false }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  async function findByUsername(username: string): UserResultArray {
+    try {
+      return await prisma.user.findMany({
+        where: {
+          username: {
+            contains: username,
+            mode: "insensitive"
+          }
+        },
+        select: {
+          id: true,
+          username: true,
+          _count: {
+            select: {
+              posts: true,
+              comments: true
+            }
+          }
+        }
       });
     } catch (error) {
       console.error(error);
@@ -219,6 +249,7 @@ export function createUserPrisma(
     findById,
     findAll,
     findByEmail,
+    findByUsername,
     findByDateBetween,
     findByIdWithPosts,
     getUserLikes,

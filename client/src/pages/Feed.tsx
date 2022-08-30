@@ -38,7 +38,7 @@ const Feed: React.FC = () => {
           username={post.user.username}
           body={post.body}
           createdAt={post.createdAt}
-          comments={post.comments}
+          comments={post._count?.comments || 0}
         />
       );
     });

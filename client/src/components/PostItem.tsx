@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../config/helpers";
-import type { Comment } from "../config/types";
 
 type PostProps = {
   id: number;
   username: string;
   body: string;
   createdAt: string;
-  comments?: Comment[] | null;
+  comments: number;
 };
 
 const PostItem: React.FC<PostProps> = ({
@@ -27,11 +26,11 @@ const PostItem: React.FC<PostProps> = ({
       <div className="text-l pl-3">{body}</div>
       <div className="flex justify-end gap-10">
         <div className="p-3">
-          {comments && (
-            <span className="font-semibold">
-              <Link to={`/post/${id}`}>Comments: {comments.length}</Link>
-            </span>
-          )}
+          <span className="font-semibold">
+            <Link to={`/post/${id}`}>
+              Comments: {comments > 0 ? comments : 0}
+            </Link>
+          </span>
         </div>
       </div>
     </div>

@@ -72,7 +72,7 @@ export default function createPostController(
     if (isNaN(page)) {
       throw apiErrors.createInvalidRequestError();
     }
-    const posts = await Post.findAllWithComments(page);
+    const posts = await Post.findAllWithCommentCount(page);
     if (!posts) {
       throw apiErrors.createNotFoundError();
     }

@@ -67,7 +67,7 @@ export function createPostPrisma(
     return null;
   }
 
-  async function findAllWithComments(page: number): PostResultArray {
+  async function findAllWithCommentCount(page: number): PostResultArray {
     const perPage = 20;
     const skip = page > 1 ? page * perPage : 0;
     try {
@@ -80,16 +80,9 @@ export function createPostPrisma(
               username: true
             }
           },
-          comments: {
-            orderBy: {
-              createdAt: "desc"
-            },
-            include: {
-              user: {
-                select: {
-                  username: true
-                }
-              }
+          _count: {
+            select: {
+              comments: true
             }
           }
         },
@@ -166,7 +159,7 @@ export function createPostPrisma(
     findAll,
     findByUserId,
     findByIdWithComments,
-    findAllWithComments,
+    findAllWithCommentCount,
     findBetweenDate,
     create,
     deleteById,

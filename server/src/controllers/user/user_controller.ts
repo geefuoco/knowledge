@@ -13,6 +13,7 @@ const MIN_PASSWORD_LENGTH = 6;
 export type UserController = {
   getUser: ExpressCallback;
   getUsers: ExpressCallback;
+  searchUsers: ExpressCallback;
   createUser: ExpressCallback;
   deleteUser: ExpressCallback;
   getUserPosts: ExpressCallback;
@@ -42,6 +43,18 @@ export default function createUserController(
   async function getUserPosts(req: Request, res: Response) {
     const id = parseIdOrThrow(req);
     const users = await User.findByIdWithPosts(id);
+    if (!users) {
+      throw apiErrors.createNotFoundError();
+    }
+    res.status(StatusCodes.OK).json(users);
+  }
+
+  async function searchUsers(req: Request, res: Response) {
+    const { username } = req.body;
+    if (!username) {
+      throw apiErrors.createBadInputError();
+    }
+    const users = await User.findByUsername(username);
     if (!users) {
       throw apiErrors.createNotFoundError();
     }
@@ -143,6 +156,7 @@ export default function createUserController(
   return Object.freeze({
     getUser: expressWrapper(getUser),
     getUsers: expressWrapper(getUsers),
+    searchUsers: expressWrapper(searchUsers),
     getUserPosts: expressWrapper(getUserPosts),
     createUser: expressWrapper(createUser),
     deleteUser: expressWrapper(deleteUser),

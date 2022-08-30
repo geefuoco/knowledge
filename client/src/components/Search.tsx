@@ -1,7 +1,28 @@
+import { FormEvent, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Search: React.FC = () => {
+  const navigate = useNavigate();
+  const search = useRef<HTMLInputElement | null>(null);
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    const { current } = search;
+    if (!current) {
+      return;
+    }
+
+    if (!current.value.length) {
+      return;
+    }
+
+    navigate(`/user/search?username=${current.value}`, { replace: true });
+  }
   return (
-    <form className="p-2 flex gap-2">
+    <form className="p-2 flex gap-2" onSubmit={handleSubmit}>
       <input
+        ref={search}
         className="p-2 rounded-sm w-full text-black"
         type="text"
         placeholder="Search"

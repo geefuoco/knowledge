@@ -7,6 +7,10 @@ export type User = {
   avatar?: string;
   posts?: Post[];
   comments?: Comment[];
+  _count?: {
+    posts?: number;
+    comments?: number;
+  };
 };
 
 export type Comment = {
@@ -26,6 +30,9 @@ export type Post = {
   body: string;
   createdAt: string;
   comments: Comment[] | null;
+  _count?: {
+    comments: number;
+  };
 };
 
 export type AuthContextType = {

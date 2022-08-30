@@ -8,7 +8,7 @@ import ToastProvider from "./components/ToastProvider";
 import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 import Post from "./pages/Post";
-
+import SearchResult from "./components/SearchResult";
 import { useAuth } from "./hooks/useAuth";
 import UserProfile from "./pages/UserProfile";
 import PersonalProfile from "./pages/PersonalProfile";
@@ -44,6 +44,7 @@ const App = () => {
                 </PostProvider>
               }
             />
+            <Route path="/user/search" element={<SearchResult />} />
             <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/profile" element={<PersonalProfile />} />
             <Route path="*" element={<NotFound />} />
