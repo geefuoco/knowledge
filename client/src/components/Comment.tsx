@@ -76,7 +76,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   );
 
   return (
-    <div className="pl-2 md:pl-8 pt-2 border-l-2 border-gray-300">
+    <div className="pl-2 md:pl-4 lg:pl-6 pt-2 border-l-2 border-gray-300">
       <div className="p-2 border-slate-500 border-2 rounded-md">
         <div className="flex justify-between">
           <div className="text-sm md:text-l font-bold px-2">{username}</div>

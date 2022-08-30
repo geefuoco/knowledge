@@ -11,6 +11,7 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const email = useRef<HTMLInputElement | null>(null);
   const password = useRef<HTMLInputElement | null>(null);
+  const username = useRef<HTMLInputElement | null>(null);
   const confirmPassword = useRef<HTMLInputElement | null>(null);
   const submit = useRef<HTMLButtonElement | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
@@ -24,10 +25,17 @@ const Register: React.FC = () => {
     e.preventDefault();
     const emailInput = email.current;
     const passwordInput = password.current;
+    const usernameInput = username.current;
     const confirmPasswordInput = confirmPassword.current;
     const button = submit.current;
 
-    if (!emailInput || !passwordInput || !confirmPasswordInput || !button) {
+    if (
+      !emailInput ||
+      !passwordInput ||
+      !confirmPasswordInput ||
+      !button ||
+      !usernameInput
+    ) {
       console.error("Error: Could not find input elements");
       return;
     }
@@ -40,18 +48,34 @@ const Register: React.FC = () => {
       return;
     }
 
-    const user = await registerUser(emailInput.value, passwordInput.value);
+    if (usernameInput.value.length < 3) {
+      setErrors(["Username must be at least 3 characters"]);
+      button.disabled = false;
+      return;
+    }
+
+    if (usernameInput.value.length > 16) {
+      setErrors(["Username must be less than 16 characters"]);
+      button.disabled = false;
+      return;
+    }
+
+    const user = await registerUser(
+      usernameInput.value,
+      emailInput.value,
+      passwordInput.value
+    );
     if (user && !("message" in user)) {
       const error = await onLogin(emailInput.value, passwordInput.value);
       if (error) {
         setErrors([
           ...errors,
-          "There was a problem logging in after sign up. Please logging in at the login form",
+          "There was a problem logging in after sign up. Please login at the login form",
         ]);
       }
       navigate("/", { replace: true });
     } else {
-      setErrors([...errors, user.message]);
+      setErrors([user.message]);
       button.disabled = false;
     }
   };
@@ -68,6 +92,17 @@ const Register: React.FC = () => {
           Sign Up
         </h1>
         <br />
+        <div className="flex justify-between gap-5">
+          <label htmlFor="username" className={labelClasses}>
+            Username
+          </label>
+          <TextInput
+            myref={username}
+            type="text"
+            required={true}
+            name="username"
+          />
+        </div>
         <div className="flex justify-between gap-5">
           <label htmlFor="email" className={labelClasses}>
             Email

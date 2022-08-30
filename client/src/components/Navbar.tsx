@@ -113,9 +113,15 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
           ) : (
-            <div className="flex gap-5">
+            <div className="flex gap-2 items-center">
+              <a
+                className="py-2 px-3 text-md bg-slate-600 rounded-lg"
+                href="/profile"
+              >
+                Profile
+              </a>
               <button
-                className="py-1 px-3 text-lg bg-slate-600 rounded-lg"
+                className="py-2 px-3 whitespace-nowrap itext-md bg-slate-600 rounded-lg"
                 onClick={() => setShowModal(true)}
               >
                 New Post
@@ -125,7 +131,7 @@ const Navbar: React.FC = () => {
                   setShowModal(false);
                   onLogout();
                 }}
-                className="py-1 px-3 text-lg bg-slate-600 rounded-lg"
+                className="py-2 px-3 text-md bg-slate-600 rounded-lg"
               >
                 Logout
               </button>
@@ -153,6 +159,11 @@ const Navbar: React.FC = () => {
           </>
         ) : (
           <>
+            <div className="text-md font-bold p-4">
+              <Link to="/profile" onClick={() => setShowDropdown(false)}>
+                Profile
+              </Link>
+            </div>
             <div className="text-md font-bold p-4">
               <button
                 role="button"

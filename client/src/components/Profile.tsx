@@ -38,7 +38,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
           <div className="basis-1/3 max-w-profile">
             <img
               className="w-full"
-              src={user?.avatar ?? "/public/images/default_avatar.png"}
+              src={user?.avatar ?? "/images/default_avatar.png"}
               alt="profile-photo"
             />
           </div>
@@ -48,12 +48,16 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
         </div>
       </aside>
 
-      <section className="md:p-4 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5">
+      <section className="md:p-4 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5 border-t-gray-200 border-t-2">
         {loading ? (
           <h1 className="text-center text-xl font-bold">Loading</h1>
         ) : null}
         {error ? <p className="text-center text-xl font">{error}</p> : null}
-        {!loading && !error && userDisplay}
+        {userDisplay ? (
+          userDisplay
+        ) : (
+          <h2 className="text-center font-light">Nothing to see here!</h2>
+        )}
       </section>
     </main>
   );

@@ -1,8 +1,13 @@
 import { config } from "../config/config";
 
-export async function registerUser(email: string, password: string) {
+export async function registerUser(
+  username: string,
+  email: string,
+  password: string
+) {
   try {
     const data = {
+      username,
       email,
       password,
     };
