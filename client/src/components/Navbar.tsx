@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useToast } from "../hooks/useToast";
 import { createPost } from "../api/createPost";
+import Search from "./Search";
 
 type ModalProps = {
   textRef: React.ForwardedRef<HTMLTextAreaElement>;
@@ -79,8 +80,8 @@ const Navbar: React.FC = () => {
           showModal={setShowModal}
         />
       )}
-      <nav className="sticky bg-slate-400 p-5 flex text-white z-20">
-        <div className="basis-1/2">
+      <nav className="sticky bg-slate-400 p-4 flex text-white z-20">
+        <div className="basis-1/3 flex-grow my-auto">
           <Link to="/">
             <h1 className="text-3xl">Knowledge</h1>
           </Link>
@@ -96,7 +97,10 @@ const Navbar: React.FC = () => {
             <div className="py-1 px-4 bg-white rounded-sm"></div>
           </button>
         </div>
-        <div className="basis-1/2 justify-end hidden md:flex">
+        <div className="hidden md:block basis-1/3">
+          <Search />
+        </div>
+        <div className="basis-1/3 flex-grow justify-end hidden md:flex">
           {!user ? (
             <div className="flex gap-8">
               <Link
