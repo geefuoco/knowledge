@@ -14,7 +14,7 @@ const TextInput: React.FC<InputOptions> = ({
 }: InputOptions) => {
   return (
     <input
-      className="p-3 leading-normal drop-shadow-md"
+      className="p-2 leading-normal drop-shadow-md rounded-md"
       placeholder={placeholder}
       required={required}
       type={type}

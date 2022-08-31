@@ -49,6 +49,15 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   }
 
+  function handleClickShowReplies() {
+    if (showReplies) {
+      setShowReplies(false);
+    } else {
+      setShowReplies(true);
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+  }
+
   const nestedComments =
     childComments &&
     childComments.length > 0 &&
@@ -69,7 +78,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     <button
       className="text-sm cursor-pointer transition durtaion-200 ease-in hover:text-green-400"
       type="button"
-      onClick={() => setShowReplies(!showReplies)}
+      onClick={handleClickShowReplies}
     >
       {!showReplies ? "Show Replies" : "Hide Replies"}
     </button>

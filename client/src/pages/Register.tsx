@@ -92,7 +92,7 @@ const Register: React.FC = () => {
           Sign Up
         </h1>
         <br />
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between gap-4">
           <label htmlFor="username" className={labelClasses}>
             Username
           </label>
@@ -103,7 +103,7 @@ const Register: React.FC = () => {
             name="username"
           />
         </div>
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between gap-4">
           <label htmlFor="email" className={labelClasses}>
             Email
           </label>
@@ -115,7 +115,7 @@ const Register: React.FC = () => {
             placeholder="example@email.com"
           />
         </div>
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between gap-4">
           <label htmlFor="password" className={labelClasses}>
             Password
           </label>
@@ -126,7 +126,7 @@ const Register: React.FC = () => {
             name="password"
           />
         </div>
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between gap-4">
           <label htmlFor="confirm-password" className={labelClasses}>
             Confirm Password
           </label>
