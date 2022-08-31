@@ -18,7 +18,8 @@ const client = new PrismaClient();
 
 const corsOptions = {
   origin: config.CLIENT,
-  optionsSuccessStatus: 200,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  optionsSuccessStatus: 204,
   credentials: true
 };
 

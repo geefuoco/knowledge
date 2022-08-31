@@ -17,6 +17,11 @@ export type UserCreateInfo = {
   bio: string | null;
 };
 
+export type UserUpdateInfo = {
+  bio?: string | null;
+  avatar?: string | null;
+};
+
 export type UserResult = Promise<User | null>;
 export type UserResultArray = Promise<User[] | null>;
 
@@ -27,6 +32,7 @@ export type UserRepository = {
   findByUsername: (username: string) => UserResultArray;
   findByIdWithPosts: (id: number) => UserResult;
   getUserLikes: (id: number) => UserResult;
+  updateUser: (id: number, userInfo: UserUpdateInfo) => UserResult;
   findByDateBetween: (start: Date, end: Date) => UserResultArray;
   create: (userInfo: UserCreateInfo) => UserResult;
   deleteById: (id: number) => UserResult;

@@ -7,6 +7,7 @@ import {
   ExpressCallback
 } from "../helpers";
 import apiErrors, { StatusCodes } from "../../errors/api_errors";
+import config from "../../config/config";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -18,6 +19,7 @@ export type UserController = {
   deleteUser: ExpressCallback;
   getUserPosts: ExpressCallback;
   loginUser: ExpressCallback;
+  updateUser: ExpressCallback;
 };
 
 export default function createUserController(
@@ -105,6 +107,20 @@ export default function createUserController(
     res.status(StatusCodes.OK).json(user);
   }
 
+  async function updateUser(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const { bio, avatar } = req.body;
+    const user = await User.updateUser(id, {
+      bio: bio || null,
+      avatar: avatar || null
+    });
+    if (!user) {
+      throw apiErrors.createBadInputError();
+    }
+    res.setHeader("Access-Control-Allow-Origin", config.CLIENT);
+    res.status(StatusCodes.OK).json(user);
+  }
+
   function validateInput(req: Request) {
     const { email, password, username, avatar, bio } = req.body;
 
@@ -160,6 +176,7 @@ export default function createUserController(
     getUserPosts: expressWrapper(getUserPosts),
     createUser: expressWrapper(createUser),
     deleteUser: expressWrapper(deleteUser),
-    loginUser: expressWrapper(loginUser)
+    loginUser: expressWrapper(loginUser),
+    updateUser: expressWrapper(updateUser)
   });
 }

@@ -6,6 +6,7 @@ export default function createUserRouter(
 ): Router {
   const router = Router();
 
+  router.patch("/user/:id", userController.updateUser);
   router.get("/user/:id", userController.getUser);
   router.get("/users", userController.getUsers);
   router.get("/user/:id/posts", userController.getUserPosts);

@@ -72,3 +72,9 @@ export type PostContextType = {
 export type CommentGroup = {
   [key: string]: Comment[];
 };
+
+export type UserUpdateOptions = {
+  id: number;
+  bio?: string;
+  avatar?: string;
+};

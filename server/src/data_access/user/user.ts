@@ -2,7 +2,8 @@ import type {
   UserRepository,
   UserResult,
   UserResultArray,
-  UserCreateInfo
+  UserCreateInfo,
+  UserUpdateInfo
 } from "./user_repository";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
@@ -245,6 +246,29 @@ export function createUserPrisma(
     return null;
   }
 
+  async function updateUser(id: number, userInfo: UserUpdateInfo): UserResult {
+    try {
+      const { bio, avatar } = userInfo;
+      const hasProfanity = profanityFilter(bio ?? "");
+      if (hasProfanity) {
+        return null;
+      }
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          bio,
+          avatar
+        }
+      });
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   return Object.freeze({
     findById,
     findAll,
@@ -258,6 +282,7 @@ export function createUserPrisma(
     create,
     deleteById,
     deleteAll,
-    login
+    login,
+    updateUser
   });
 }
