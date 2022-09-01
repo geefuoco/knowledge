@@ -1,7 +1,6 @@
 import { globals } from "../../../setup/setup";
 
 describe("Post Route", () => {
-  console.log("RUNNING POSTS TEST");
   let postId: number | null = null;
   it("can create a post", async () => {
     const postInfo = {
