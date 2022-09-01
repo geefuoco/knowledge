@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
-    "test": "jest --watch --detectOpenHandles --bail",
+    "test": "jest --watch --runInBand",
     "get-types": "typesync && npm i",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "lint": "eslint src --ext .ts --fix",
