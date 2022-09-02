@@ -2,6 +2,10 @@ import { Router, Request, Response } from "express";
 import type { UserRepository } from "../data_access/user/user_repository";
 import type { PostRepository } from "../data_access/post/post_repository";
 import type { CommentRepository } from "../data_access/comment/comment_repository";
+import type { LikeRepository } from "../data_access/like/like_repository";
+
+import createLikeRouter from "./like/like_router";
+import createLikeController from "../controllers/like/like_controller";
 
 import createUserRouter from "./user/user_router";
 import createUserController from "../controllers/user/user_controller";
@@ -19,25 +23,31 @@ import {
 import { createPassportStrategy } from "../config/passport";
 import { StatusCodes } from "../errors/api_errors";
 
-export function createApiRouter(repositories: {
+type Repositories = {
   User: UserRepository;
   Post: PostRepository;
   Comment: CommentRepository;
-}): Router {
+  Like: LikeRepository;
+};
+
+export function createApiRouter(repositories: Repositories): Router {
   const router = Router();
-  const { User, Post, Comment } = repositories;
+  const { User, Post, Comment, Like } = repositories;
 
   const userController = createUserController(User);
   const postController = createPostController(Post);
   const commentController = createCommentController(Comment);
+  const likeController = createLikeController(Like);
 
   const userRouter = createUserRouter(userController);
   const postRouter = createPostRouter(postController);
   const commentRouter = createCommentRouter(commentController);
+  const likeRouter = createLikeRouter(likeController);
 
   router.use(authenticateRoute, userRouter);
   router.use(authenticateRoute, postRouter);
   router.use(authenticateRoute, commentRouter);
+  router.use(authenticateRoute, likeRouter);
   router.use(continueRoute);
 
   return router;

@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
           showModal={setShowModal}
         />
       )}
-      <nav className="sticky top-0  text-white">
+      <nav className="sticky top-0  text-white bg-slate-400">
         <div className="relative z-10 flex w-full h-full bg-slate-400 p-4">
           <div className="basis-1/3 flex-grow my-auto">
             <Link to="/">
@@ -149,7 +149,7 @@ const Navbar: React.FC = () => {
 
         <div
           className={`text-white transition-all duration-500 ease-in-out absolute left-0 w-full bg-slate-400 md:hidden ${
-            showDropdown ? "top-16" : "-top-96"
+            showDropdown ? "top-16" : "-top-80"
           }`}
         >
           {!user ? (

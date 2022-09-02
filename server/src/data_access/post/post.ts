@@ -33,12 +33,22 @@ export function createPostPrisma(
                 select: {
                   username: true
                 }
+              },
+              _count: {
+                select: {
+                  likes: true
+                }
               }
             }
           },
           user: {
             select: {
               username: true
+            }
+          },
+          _count: {
+            select: {
+              likes: true
             }
           }
         }
@@ -82,7 +92,8 @@ export function createPostPrisma(
           },
           _count: {
             select: {
-              comments: true
+              comments: true,
+              likes: true
             }
           }
         },

@@ -10,6 +10,7 @@ export type User = {
   _count?: {
     posts?: number;
     comments?: number;
+    likes?: number;
   };
 };
 
@@ -21,6 +22,9 @@ export type Comment = {
   createdAt: string;
   post_id: number;
   parent_id: number | null;
+  _count?: {
+    likes?: number;
+  };
 };
 
 export type Post = {
@@ -31,7 +35,8 @@ export type Post = {
   createdAt: string;
   comments: Comment[] | null;
   _count?: {
-    comments: number;
+    comments?: number;
+    likes?: number;
   };
 };
 

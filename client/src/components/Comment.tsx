@@ -4,12 +4,14 @@ import { usePost } from "../hooks/usePost";
 import { useAuth } from "../hooks/useAuth";
 import { replyToComment } from "../api/replyToComment";
 import { useToast } from "../hooks/useToast";
+import Like from "./Like";
 
 type CommentProps = {
   id: number;
   username: string;
   body: string;
   createdAt: string;
+  likes?: number;
 };
 
 const CommentComponent: React.FC<CommentProps> = ({
@@ -17,6 +19,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   username,
   body,
   createdAt,
+  likes,
 }) => {
   const [showReplyButton, setShowReplyButton] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
@@ -70,6 +73,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           username={comment.user?.username}
           body={comment.body}
           createdAt={comment.createdAt}
+          likes={comment._count?.likes}
         />
       );
     });
@@ -94,7 +98,8 @@ const CommentComponent: React.FC<CommentProps> = ({
         <div className="pl-2 text-md md:text-l">{body}</div>
         <div className="flex justify-end p-2 gap-4">
           <div>{showRepliesButton}</div>
-          <div className="px-2">
+          <div className="px-2 flex gap-3">
+            <Like likes={likes || 0} />
             <span
               className="font-bold cursor-pointer"
               onClick={() => setShowReplyButton(!showReplyButton)}

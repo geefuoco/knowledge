@@ -39,6 +39,7 @@ const Feed: React.FC = () => {
           body={post.body}
           createdAt={post.createdAt}
           comments={post._count?.comments || 0}
+          likes={post._count?.likes || 0}
         />
       );
     });

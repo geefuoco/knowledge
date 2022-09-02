@@ -5,6 +5,7 @@ import { usePost } from "../hooks/usePost";
 import { useAuth } from "../hooks/useAuth";
 import { useToast } from "../hooks/useToast";
 import { replyToPost } from "../api/replyToPost";
+import Like from "../components/Like";
 
 const Post: React.FC = () => {
   const [showReply, setShowReply] = useState(false);
@@ -52,7 +53,8 @@ const Post: React.FC = () => {
         </div>
         <div className="text-l md:text-xl">{post.body}</div>
         <div className="flex justify-end p-2">
-          <div className="px-2">
+          <div className="px-2 flex gap-3">
+            <Like likes={post._count?.likes ?? 0} />
             <span
               className="font-bold cursor-pointer"
               onClick={() => setShowReply(!showReply)}
@@ -90,6 +92,7 @@ const Post: React.FC = () => {
                 username={comment.user.username}
                 body={comment.body}
                 createdAt={comment.createdAt}
+                likes={comment._count?.likes}
               />
             );
           })}

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../config/helpers";
+import Like from "./Like";
 
 type PostProps = {
   id: number;
@@ -7,6 +8,7 @@ type PostProps = {
   body: string;
   createdAt: string;
   comments: number;
+  likes: number;
 };
 
 const PostItem: React.FC<PostProps> = ({
@@ -15,6 +17,7 @@ const PostItem: React.FC<PostProps> = ({
   body,
   createdAt,
   comments,
+  likes,
 }) => {
   const time = dateFormatter.format(Date.parse(createdAt));
   return (
@@ -25,7 +28,8 @@ const PostItem: React.FC<PostProps> = ({
       </div>
       <div className="text-l pl-3">{body}</div>
       <div className="flex justify-end gap-10">
-        <div className="p-3">
+        <div className="p-3 flex gap-3">
+          <Like likes={likes} />
           <span className="font-semibold">
             <Link to={`/post/${id}`}>
               Comments: {comments > 0 ? comments : 0}
