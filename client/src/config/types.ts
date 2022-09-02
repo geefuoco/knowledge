@@ -7,6 +7,7 @@ export type User = {
   avatar?: string;
   posts?: Post[];
   comments?: Comment[];
+  likes: Like[];
   _count?: {
     posts?: number;
     comments?: number;
@@ -38,6 +39,13 @@ export type Post = {
     comments?: number;
     likes?: number;
   };
+};
+
+export type Like = {
+  id: number;
+  user_id: number;
+  post_id?: number;
+  comment_id?: number;
 };
 
 export type AuthContextType = {
