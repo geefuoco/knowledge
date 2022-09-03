@@ -8,6 +8,7 @@ export type LikeResult = Promise<Like | null>;
 export type LikeResultArray = Promise<Like[] | null>;
 
 export type LikeCreateInfo = {
+  key: string;
   user_id: number;
   post_id?: number;
   comment_id?: number;
@@ -20,4 +21,5 @@ export type LikeRepository = {
   deleteById: (id: number) => LikeResult;
   deleteAll: () => Promise<{ count: number } | null>;
   deleteAllByUserId: (userId: number) => Promise<{ count: number } | null>;
+  findByKey: (key: string) => LikeResult;
 };

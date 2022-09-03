@@ -20,6 +20,7 @@ export type UserController = {
   getUserPosts: ExpressCallback;
   loginUser: ExpressCallback;
   updateUser: ExpressCallback;
+  getUserLikes: ExpressCallback;
 };
 
 export default function createUserController(
@@ -49,6 +50,15 @@ export default function createUserController(
       throw apiErrors.createNotFoundError();
     }
     res.status(StatusCodes.OK).json(users);
+  }
+
+  async function getUserLikes(req: Request, res: Response) {
+    const id = parseIdOrThrow(req);
+    const user = await User.getUserLikes(id);
+    if (!user) {
+      throw apiErrors.createNotFoundError();
+    }
+    res.status(StatusCodes.OK).json(user);
   }
 
   async function searchUsers(req: Request, res: Response) {
@@ -174,6 +184,7 @@ export default function createUserController(
     getUsers: expressWrapper(getUsers),
     searchUsers: expressWrapper(searchUsers),
     getUserPosts: expressWrapper(getUserPosts),
+    getUserLikes: expressWrapper(getUserLikes),
     createUser: expressWrapper(createUser),
     deleteUser: expressWrapper(deleteUser),
     loginUser: expressWrapper(loginUser),

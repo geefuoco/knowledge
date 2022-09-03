@@ -85,7 +85,7 @@ const client = new PrismaClient();
     }
   });
 
-  const comment5 = await client.comment.create({
+  const _comment5 = await client.comment.create({
     data: {
       body: "quadruply nested comment",
       createdAt: new Date(Date.now()),
@@ -95,8 +95,10 @@ const client = new PrismaClient();
     }
   });
 
-  const like = await client.like.create({
+  const key = `comment_${comment3.id}_${user2.id}`;
+  const _like = await client.like.create({
     data: {
+      key,
       user_id: user2.id,
       comment_id: comment3.id
     }

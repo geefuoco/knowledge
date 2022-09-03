@@ -147,7 +147,8 @@ export function createUserPrisma(
         where: {
           id
         },
-        include: {
+        select: {
+          username: true,
           likes: true
         }
       });

@@ -31,17 +31,7 @@ const Feed: React.FC = () => {
     posts &&
     posts.length > 0 &&
     posts.map((post: Post) => {
-      return (
-        <PostItem
-          id={post.id}
-          key={post.id}
-          username={post.user.username}
-          body={post.body}
-          createdAt={post.createdAt}
-          comments={post._count?.comments || 0}
-          likes={post._count?.likes || 0}
-        />
-      );
+      return <PostItem key={post.id} {...post} />;
     });
 
   return <main className="container lg:w-2/5 mx-auto ">{postsDisplay}</main>;

@@ -50,6 +50,7 @@ model Comment {
 
 model Like {
 	id Int @id @default(autoincrement())
+    key String @unique
 	user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 	user_id Int
 	post Post?  @relation(fields: [post_id], references: [id], onDelete: Cascade , map: "like_post")

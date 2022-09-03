@@ -51,7 +51,6 @@ describe("COMMENT", () => {
   });
 
   it("can delete the comment", async () => {
-    console.log(commentId);
     const res = await agent.delete(`/api/v1/comment/${commentId}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.body).toBe("Testing comment");

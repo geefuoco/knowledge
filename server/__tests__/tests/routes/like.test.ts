@@ -41,8 +41,11 @@ describe("LIKES", () => {
   });
 
   it("should create a like on a post", async () => {
+    const uid = await getUserId();
+    const key = `comment_${commentId}_${uid}`;
     const likeInfo = {
-      user_id: await getUserId(),
+      key,
+      user_id: uid,
       comment_id: commentId
     };
 

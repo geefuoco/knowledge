@@ -51,7 +51,6 @@ export default function createCommentController(
   async function deleteComment(req: Request, res: Response) {
     const id = parseIdOrThrow(req);
     const comment = await Comment.deleteById(id);
-    console.log(comment);
     if (!comment) {
       throw apiErrors.createNotFoundError();
     }

@@ -30,7 +30,7 @@ const PostProvider: React.FC<{ children: React.ReactNode }> = ({
     if (post?.comments) {
       setComments(post.comments);
     }
-  }, [post?.comments]);
+  }, [post?.comments, post?._count]);
 
   function getReplies(parentId: number) {
     return commentsByParentId[parentId];

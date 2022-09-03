@@ -26,11 +26,24 @@ export default function createLikeController(
     if (!user_id || (!post_id && !comment_id) || (post_id && comment_id)) {
       throw apiErrors.createBadInputError();
     }
+    const keyStart = post_id ? "post" : "comment";
+    const keyMiddle = post_id || comment_id;
+    const key = `${keyStart}_${keyMiddle}_${user_id}`;
+
+    const oldLike = await Like.findByKey(key);
+    console.log(oldLike);
+    if (oldLike) {
+      res.status(StatusCodes.CREATED).end();
+      return;
+    }
+
     const like = await Like.create({
+      key,
       user_id,
       post_id: post_id ?? null,
       comment_id: comment_id ?? null
     });
+
     if (!like) {
       throw apiErrors.createBadInputError();
     }

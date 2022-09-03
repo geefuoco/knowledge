@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import AuthProvider from "./components/AuthProvider";
 import PostProvider from "./components/PostProvider";
 import ToastProvider from "./components/ToastProvider";
+import LikeProvider from "./components/LikeProvider";
 import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 import Post from "./pages/Post";
@@ -30,26 +31,28 @@ const App = () => {
   return (
     <AuthProvider>
       <ToastProvider>
-        <Navbar />
-        <Routes>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Feed />} />
-            <Route
-              path="/post/:id"
-              element={
-                <PostProvider>
-                  <Post />
-                </PostProvider>
-              }
-            />
-            <Route path="/user/search" element={<SearchResult />} />
-            <Route path="/user/:id" element={<UserProfile />} />
-            <Route path="/profile" element={<PersonalProfile />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <LikeProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Feed />} />
+              <Route
+                path="/post/:id"
+                element={
+                  <PostProvider>
+                    <Post />
+                  </PostProvider>
+                }
+              />
+              <Route path="/user/search" element={<SearchResult />} />
+              <Route path="/user/:id" element={<UserProfile />} />
+              <Route path="/profile" element={<PersonalProfile />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </LikeProvider>
       </ToastProvider>
     </AuthProvider>
   );

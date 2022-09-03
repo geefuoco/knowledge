@@ -99,7 +99,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         <div className="flex justify-end p-2 gap-4">
           <div>{showRepliesButton}</div>
           <div className="px-2 flex gap-3">
-            <Like likes={likes || 0} />
+            <Like likes={likes || 0} type="comment" parentId={id} />
             <span
               className="font-bold cursor-pointer"
               onClick={() => setShowReplyButton(!showReplyButton)}

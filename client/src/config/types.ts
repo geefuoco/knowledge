@@ -34,6 +34,7 @@ export type Post = {
   user: User;
   body: string;
   createdAt: string;
+  username?: string;
   comments: Comment[] | null;
   _count?: {
     comments?: number;
@@ -90,4 +91,12 @@ export type UserUpdateOptions = {
   id: number;
   bio?: string;
   avatar?: string;
+};
+
+export type LikeContextType = {
+  likes: Like[];
+  checkIfLiked: (id: number, type: "post" | "comment") => boolean;
+  getLike: (id: number, type: "post" | "comment") => Like | undefined;
+  setNewLike: (l: Like) => void;
+  removeLike: (id: number) => void;
 };

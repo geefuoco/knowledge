@@ -25,6 +25,15 @@ export function createLikePrisma(prisma: PrismaClient): LikeRepository {
     return null;
   }
 
+  async function findByKey(key: string): LikeResult {
+    try {
+      return await prisma.like.findFirst({ where: { key } });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function create(likeInfo: LikeCreateInfo): LikeResult {
     try {
       return await prisma.like.create({ data: likeInfo });
@@ -69,6 +78,7 @@ export function createLikePrisma(prisma: PrismaClient): LikeRepository {
     create,
     deleteById,
     deleteAllByUserId,
-    deleteAll
+    deleteAll,
+    findByKey
   });
 }
