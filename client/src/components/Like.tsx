@@ -15,14 +15,17 @@ const Like: React.FC<LikeProps> = ({ likes, type, parentId }) => {
   const { user } = useAuth();
   const { checkIfLiked, getLike, setNewLike, removeLike } = useLikes();
   const [clicked, setClicked] = useState<boolean>(checkIfLiked(parentId, type));
+  const [likeCount, setLikeCount] = useState(likes);
 
   async function handleLike() {
     if (!clicked) {
       const result = await likePost();
       setClicked(result);
+      setLikeCount(likeCount + 1);
     } else {
       const result = await unlikePost();
       setClicked(!result);
+      setLikeCount(Math.max(likeCount - 1, 0));
     }
   }
 
@@ -70,7 +73,7 @@ const Like: React.FC<LikeProps> = ({ likes, type, parentId }) => {
   return (
     <span className="cursor-pointer">
       <img className="inline pb-1" src={src} alt="star" onClick={handleLike} />
-      {likes}
+      {likeCount}
     </span>
   );
 };

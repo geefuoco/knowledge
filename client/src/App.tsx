@@ -20,7 +20,11 @@ const ProtectedRoute: React.FC = () => {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  return <Outlet />;
+  return (
+    <LikeProvider>
+      <Outlet />
+    </LikeProvider>
+  );
 };
 
 const NotFound: React.FC = () => {
@@ -31,28 +35,26 @@ const App = () => {
   return (
     <AuthProvider>
       <ToastProvider>
-        <LikeProvider>
-          <Navbar />
-          <Routes>
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Feed />} />
-              <Route
-                path="/post/:id"
-                element={
-                  <PostProvider>
-                    <Post />
-                  </PostProvider>
-                }
-              />
-              <Route path="/user/search" element={<SearchResult />} />
-              <Route path="/user/:id" element={<UserProfile />} />
-              <Route path="/profile" element={<PersonalProfile />} />
-              <Route path="*" element={<NotFound />} />
-            </Route>
-          </Routes>
-        </LikeProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Feed />} />
+            <Route
+              path="/post/:id"
+              element={
+                <PostProvider>
+                  <Post />
+                </PostProvider>
+              }
+            />
+            <Route path="/user/search" element={<SearchResult />} />
+            <Route path="/user/:id" element={<UserProfile />} />
+            <Route path="/profile" element={<PersonalProfile />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
       </ToastProvider>
     </AuthProvider>
   );
