@@ -54,7 +54,11 @@ const Post: React.FC = () => {
         <div className="text-l md:text-xl">{post.body}</div>
         <div className="flex justify-end p-2">
           <div className="px-2 flex gap-3">
-            <Like likes={post._count?.likes ?? 0} />
+            <Like
+              likes={post._count?.likes ?? 0}
+              type="post"
+              parentId={post.id}
+            />
             <span
               className="font-bold cursor-pointer"
               onClick={() => setShowReply(!showReply)}

@@ -3,22 +3,27 @@ import { useState, useEffect } from "react";
 import { LikeContext } from "../context/LikeContext";
 import { useAuth } from "../hooks/useAuth";
 import { getUserLikes } from "../api/getUserLikes";
+import { useAsync } from "../hooks/useAsync";
 
 const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
+  if (!user) {
+    return null;
+  }
+  const {
+    loading,
+    error,
+    value: userLikes,
+  } = useAsync(() => getUserLikes(user.id), [user.id, user.likes]);
   const [likes, setLikes] = useState<Like[]>([]);
 
   useEffect(() => {
-    async function setupLikes() {
-      if (user) {
-        const likes = await getUserLikes(user.id);
-        setLikes(likes ?? []);
-      }
+    if (userLikes) {
+      setLikes(userLikes);
     }
-    setupLikes();
-  }, [user?.likes]);
+  }, [user.likes, userLikes]);
 
   function checkIfLiked(id: number, type: "post" | "comment"): boolean {
     return likes.find((like) => like[`${type}_id`] === id) !== undefined;
@@ -43,9 +48,21 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
     setNewLike,
     removeLike,
   };
+  let result;
+  if (loading) {
+    result = (
+      <h1 className="container mx-auto font-bold text-center text-xl">
+        Loading
+      </h1>
+    );
+  } else if (error) {
+    result = <h1>{error}</h1>;
+  } else {
+    result = children;
+  }
 
   return (
-    <LikeContext.Provider value={contextValue}>{children}</LikeContext.Provider>
+    <LikeContext.Provider value={contextValue}>{result}</LikeContext.Provider>
   );
 };
 
