@@ -67,7 +67,8 @@ export function createUserPrisma(
             include: {
               _count: {
                 select: {
-                  comments: true
+                  comments: true,
+                  likes: true
                 }
               }
             }

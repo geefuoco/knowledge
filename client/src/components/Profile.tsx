@@ -68,16 +68,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
     user.posts &&
     user.posts.length > 0 &&
     user.posts.map((post: Post) => {
-      return (
-        <PostItem
-          id={post.id}
-          key={post.id}
-          username={user.username}
-          body={post.body}
-          createdAt={post.createdAt}
-          comments={post._count?.comments || 0}
-        />
-      );
+      return <PostItem {...post} user={user} key={post.id} />;
     });
 
   return (
