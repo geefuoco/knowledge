@@ -1,13 +1,13 @@
-import type { User, HttpError } from "../config/types";
+import type { User, HttpError } from "../../config/types";
 import { useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { loginToServer } from "../api/login";
+import { AuthContext } from "../../context/AuthContext";
+import { loginToServer } from "../../api/login";
 import {
   storeLocalUser,
   removeLocalUser,
   getLocalUser,
-} from "../api/localStore";
-import { logoutUser } from "../api/logout";
+} from "../../api/localStore";
+import { logoutUser } from "../../api/logout";
 
 type AuthProps = {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import { useMemo, useState, useEffect } from "react";
-import type { Comment, CommentGroup } from "../config/types";
+import type { Comment, CommentGroup } from "../../config/types";
 import { useParams } from "react-router-dom";
-import { PostContext } from "../context/PostContext";
-import { useAsync } from "../hooks/useAsync";
-import { getPost } from "../api/getPost";
+import { PostContext } from "../../context/PostContext";
+import { useAsync } from "../../hooks/useAsync";
+import { getPost } from "../../api/getPost";
 
 const PostProvider: React.FC<{ children: React.ReactNode }> = ({
   children,

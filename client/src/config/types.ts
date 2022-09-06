@@ -100,3 +100,11 @@ export type LikeContextType = {
   setNewLike: (l: Like) => void;
   removeLike: (id: number) => void;
 };
+
+export type FeedContextType = {
+  posts: Post[];
+  addPost: (p: Post) => void;
+  removePost: (id: number) => void;
+  pageNumber: number;
+  setPageNumber: (page: number) => void;
+};

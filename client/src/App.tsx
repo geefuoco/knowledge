@@ -2,10 +2,11 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import AuthProvider from "./components/AuthProvider";
-import PostProvider from "./components/PostProvider";
-import ToastProvider from "./components/ToastProvider";
-import LikeProvider from "./components/LikeProvider";
+import AuthProvider from "./components/providers/AuthProvider";
+import PostProvider from "./components/providers/PostProvider";
+import ToastProvider from "./components/providers/ToastProvider";
+import LikeProvider from "./components/providers/LikeProvider";
+import FeedProvider from "./components/providers/FeedProvider";
 import Navbar from "./components/Navbar";
 import Feed from "./pages/Feed";
 import Post from "./pages/Post";
@@ -21,9 +22,11 @@ const ProtectedRoute: React.FC = () => {
     return <Navigate to="/login" replace />;
   }
   return (
-    <LikeProvider>
-      <Outlet />
-    </LikeProvider>
+    <FeedProvider>
+      <LikeProvider>
+        <Outlet />
+      </LikeProvider>
+    </FeedProvider>
   );
 };
 

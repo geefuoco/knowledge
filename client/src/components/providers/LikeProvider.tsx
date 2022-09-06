@@ -1,9 +1,9 @@
-import type { Like } from "../config/types";
+import type { Like } from "../../config/types";
 import { useState, useEffect } from "react";
-import { LikeContext } from "../context/LikeContext";
-import { useAuth } from "../hooks/useAuth";
-import { getUserLikes } from "../api/getUserLikes";
-import { useAsync } from "../hooks/useAsync";
+import { LikeContext } from "../../context/LikeContext";
+import { useAuth } from "../../hooks/useAuth";
+import { getUserLikes } from "../../api/getUserLikes";
+import { useAsync } from "../../hooks/useAsync";
 
 const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -16,7 +16,7 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
     loading,
     error,
     value: userLikes,
-  } = useAsync(() => getUserLikes(user.id), [user.id, user.likes]);
+  } = useAsync(() => getUserLikes(user.id), [user.id]);
   const [likes, setLikes] = useState<Like[]>([]);
 
   useEffect(() => {
