@@ -15,8 +15,10 @@ const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   useEffect(() => {
-    setPosts(value);
-  }, [value]);
+    if (value) {
+      setPosts(value);
+    }
+  }, [value, pageNumber]);
 
   if (loading) {
     return (

@@ -5,6 +5,7 @@ import Like from "./Like";
 
 const PostItem: React.FC<Post> = ({ id, body, user, createdAt, _count }) => {
   if (!_count) {
+    console.error("Error while fetching comments and likes");
     return null;
   }
   const { comments, likes } = _count;

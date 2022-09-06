@@ -9,21 +9,18 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
-  if (!user) {
-    return null;
-  }
   const {
     loading,
     error,
     value: userLikes,
-  } = useAsync(() => getUserLikes(user.id), [user.id]);
+  } = useAsync(() => getUserLikes(user?.id || -1), [user?.id]);
   const [likes, setLikes] = useState<Like[]>([]);
 
   useEffect(() => {
     if (userLikes) {
       setLikes(userLikes);
     }
-  }, [user.likes, userLikes]);
+  }, [user?.likes, userLikes]);
 
   function checkIfLiked(id: number, type: "post" | "comment"): boolean {
     return likes.find((like) => like[`${type}_id`] === id) !== undefined;

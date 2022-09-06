@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useToast } from "../hooks/useToast";
 import { createPost } from "../api/createPost";
 import Search from "./Search";
+import { useFeed } from "../hooks/useFeed";
 
 type ModalProps = {
   textRef: React.ForwardedRef<HTMLTextAreaElement>;
@@ -57,6 +58,7 @@ const Navbar: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const { user, onLogout } = useAuth();
   const { createToast } = useToast();
+  const { addPost } = useFeed();
   const textRef = useRef<HTMLTextAreaElement | null>(null);
 
   async function handleCreateNewPost() {
@@ -64,6 +66,8 @@ const Navbar: React.FC = () => {
     if (user && current) {
       const post = await createPost(user.id, current.value);
       if (post && !("message" in post)) {
+        //state is not being updated here
+        addPost(post);
         createToast("Created post.", "success", true);
       } else {
         createToast("Error: Could not create post", "danger", false);

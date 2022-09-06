@@ -4,7 +4,6 @@ import PostItem from "../components/PostItem";
 
 const Feed: React.FC = () => {
   const { posts } = useFeed();
-
   const postsDisplay =
     posts &&
     posts.length > 0 &&

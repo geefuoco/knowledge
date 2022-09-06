@@ -79,7 +79,7 @@ export function createPostPrisma(
 
   async function findAllWithCommentCount(page: number): PostResultArray {
     const perPage = 20;
-    const skip = page > 1 ? page * perPage : 0;
+    const skip = page > 1 ? (page - 1) * perPage : 0;
     try {
       return await prisma.post.findMany({
         take: perPage,
@@ -129,7 +129,27 @@ export function createPostPrisma(
       if (hasProfanity) {
         return null;
       }
-      return await prisma.post.create({ data: postInfo });
+      const post = await prisma.post.create({ data: postInfo });
+      if (post) {
+        return await prisma.post.findFirst({
+          where: {
+            id: post.id
+          },
+          include: {
+            _count: {
+              select: {
+                comments: true,
+                likes: true
+              }
+            },
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        });
+      }
     } catch (error) {
       console.error(error);
     }

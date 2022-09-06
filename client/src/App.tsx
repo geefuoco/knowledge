@@ -21,13 +21,7 @@ const ProtectedRoute: React.FC = () => {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-  return (
-    <FeedProvider>
-      <LikeProvider>
-        <Outlet />
-      </LikeProvider>
-    </FeedProvider>
-  );
+  return <Outlet />;
 };
 
 const NotFound: React.FC = () => {
@@ -38,26 +32,30 @@ const App = () => {
   return (
     <AuthProvider>
       <ToastProvider>
-        <Navbar />
-        <Routes>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Feed />} />
-            <Route
-              path="/post/:id"
-              element={
-                <PostProvider>
-                  <Post />
-                </PostProvider>
-              }
-            />
-            <Route path="/user/search" element={<SearchResult />} />
-            <Route path="/user/:id" element={<UserProfile />} />
-            <Route path="/profile" element={<PersonalProfile />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
+        <LikeProvider>
+          <FeedProvider>
+            <Navbar />
+            <Routes>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Feed />} />
+                <Route
+                  path="/post/:id"
+                  element={
+                    <PostProvider>
+                      <Post />
+                    </PostProvider>
+                  }
+                />
+                <Route path="/user/search" element={<SearchResult />} />
+                <Route path="/user/:id" element={<UserProfile />} />
+                <Route path="/profile" element={<PersonalProfile />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </FeedProvider>
+        </LikeProvider>
       </ToastProvider>
     </AuthProvider>
   );
