@@ -1,5 +1,5 @@
 import type { ToastProps, ToastType } from "../../config/types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ToastContext } from "../../context/ToastContext";
 import ToastContainer from "../Toast";
 
@@ -23,11 +23,14 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
     setToasts(newToasts);
   }
 
-  const contextValue = {
-    toasts,
-    createToast,
-    removeToast,
-  };
+  const contextValue = useMemo(
+    () => ({
+      toasts,
+      createToast,
+      removeToast,
+    }),
+    [toasts]
+  );
 
   return (
     <ToastContext.Provider value={contextValue}>

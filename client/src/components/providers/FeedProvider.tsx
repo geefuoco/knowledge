@@ -1,5 +1,5 @@
 import type { Post } from "../../config/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FeedContext } from "../../context/FeedContext";
 import { useAsync } from "../../hooks/useAsync";
 import { getPosts } from "../../api/getPosts";
@@ -19,6 +19,17 @@ const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
       setPosts(value);
     }
   }, [value, pageNumber]);
+
+  const contextValue = useMemo(
+    () => ({
+      posts,
+      addPost,
+      removePost,
+      pageNumber,
+      setPageNumber,
+    }),
+    [posts]
+  );
 
   if (loading) {
     return (
@@ -41,14 +52,6 @@ const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
   function removePost(id: number) {
     setPosts(posts.filter((p) => p.id !== id));
   }
-
-  const contextValue = {
-    posts,
-    addPost,
-    removePost,
-    pageNumber,
-    setPageNumber,
-  };
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>

@@ -66,7 +66,6 @@ const Navbar: React.FC = () => {
     if (user && current) {
       const post = await createPost(user.id, current.value);
       if (post && !("message" in post)) {
-        //state is not being updated here
         addPost(post);
         createToast("Created post.", "success", true);
       } else {

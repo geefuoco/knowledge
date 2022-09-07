@@ -9,17 +9,16 @@ import { deletePost } from "../api/deletePost";
 import Like from "./Like";
 
 const PostItem: React.FC<Post> = ({ id, body, user, createdAt, _count }) => {
-  if (!_count) {
-    console.error("Error while fetching comments and likes");
-    return null;
-  }
-
   const { createToast } = useToast();
   const currentUser = useAuth().user;
   const { removePost } = useFeed();
-  const { comments, likes } = _count;
   const time = dateFormatter.format(Date.parse(createdAt));
 
+  if (!_count) {
+    console.error("Error while fetching comments and likes");
+  }
+  const comments = _count?.comments;
+  const likes = _count?.likes;
   async function handleRemovePost() {
     try {
       const result = await deletePost(id);

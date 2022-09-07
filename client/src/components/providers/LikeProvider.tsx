@@ -1,5 +1,5 @@
 import type { Like } from "../../config/types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { LikeContext } from "../../context/LikeContext";
 import { useAuth } from "../../hooks/useAuth";
 import { getUserLikes } from "../../api/getUserLikes";
@@ -38,13 +38,17 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
     setLikes(likes.filter((like) => like.id !== id));
   }
 
-  const contextValue = {
-    likes,
-    checkIfLiked,
-    getLike,
-    setNewLike,
-    removeLike,
-  };
+  const contextValue = useMemo(
+    () => ({
+      likes,
+      checkIfLiked,
+      getLike,
+      setNewLike,
+      removeLike,
+    }),
+    [likes]
+  );
+
   let result;
   if (loading) {
     result = (

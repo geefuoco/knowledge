@@ -1,5 +1,5 @@
 import type { User, HttpError } from "../../config/types";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { loginToServer } from "../../api/login";
 import {
@@ -42,12 +42,14 @@ const AuthProvider: React.FC<AuthProps> = ({ children }) => {
     removeLocalUser();
   };
 
-  const contextValue = {
-    user,
-    onLogin: handleLogin,
-    onLogout: handleLogout,
-  };
-
+  const contextValue = useMemo(
+    () => ({
+      user,
+      onLogin: handleLogin,
+      onLogout: handleLogout,
+    }),
+    [user]
+  );
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
