@@ -15,7 +15,7 @@ const Like: React.FC<LikeProps> = ({ likes, type, parentId }) => {
   const { user } = useAuth();
   const { checkIfLiked, getLike, setNewLike, removeLike } = useLikes();
   const [clicked, setClicked] = useState<boolean>(checkIfLiked(parentId, type));
-  const [likeCount, setLikeCount] = useState(likes);
+  const [likeCount, setLikeCount] = useState<number>(likes);
 
   async function handleLike() {
     if (!clicked) {

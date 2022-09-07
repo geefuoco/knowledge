@@ -1,3 +1,4 @@
+import type { User } from "../config/types";
 import { useRef, useState } from "react";
 import { dateFormatter } from "../config/helpers";
 import { usePost } from "../hooks/usePost";
@@ -8,7 +9,7 @@ import Like from "./Like";
 
 type CommentProps = {
   id: number;
-  username: string;
+  user: User;
   body: string;
   createdAt: string;
   likes?: number;
@@ -16,7 +17,7 @@ type CommentProps = {
 
 const CommentComponent: React.FC<CommentProps> = ({
   id,
-  username,
+  user,
   body,
   createdAt,
   likes,
@@ -25,25 +26,30 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [showReplies, setShowReplies] = useState(false);
   const { getReplies, post, createNewComment } = usePost();
   const { createToast } = useToast();
-  const { user } = useAuth();
+  const currentUser = useAuth().user;
   const childComments = getReplies(id);
   const time = dateFormatter.format(Date.parse(createdAt));
   const replyRef = useRef<HTMLTextAreaElement | null>(null);
 
   async function handleReply() {
     setShowReplyButton(false);
-    if (post && user) {
+    if (post && currentUser) {
       const { current } = replyRef;
       if (!current) {
         return;
       }
-      const comment = await replyToComment(id, post.id, user.id, current.value);
+      const comment = await replyToComment(
+        id,
+        post.id,
+        currentUser.id,
+        current.value
+      );
 
       if (!comment || "message" in comment) {
         createToast("Error: could not create comment.", "danger", true);
         return;
       }
-      comment.user = user;
+      comment.user = currentUser;
       createNewComment(comment);
       createToast("Created comment.", "success", true);
     } else {
@@ -70,7 +76,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         <CommentComponent
           id={comment.id}
           key={comment.id}
-          username={comment.user?.username}
+          user={comment.user}
           body={comment.body}
           createdAt={comment.createdAt}
           likes={comment._count?.likes}
@@ -92,7 +98,9 @@ const CommentComponent: React.FC<CommentProps> = ({
     <div className="pl-2 md:pl-4 lg:pl-6 pt-2 border-l-2 border-gray-300">
       <div className="p-2 border-slate-500 border-2 rounded-md">
         <div className="flex justify-between">
-          <div className="text-sm md:text-l font-bold px-2">{username}</div>
+          <div className="text-sm md:text-l font-bold px-2">
+            {user.username}
+          </div>
           <div className="px-2 text-xs md:text-sm">{time}</div>
         </div>
         <div className="pl-2 text-md md:text-l">{body}</div>
@@ -106,6 +114,11 @@ const CommentComponent: React.FC<CommentProps> = ({
             >
               Reply
             </span>
+            {currentUser && currentUser.id === user.id && (
+              <span>
+                <img src="/images/trash.svg" alt="trash icon" />
+              </span>
+            )}
           </div>
         </div>
       </div>

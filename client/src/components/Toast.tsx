@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { memo, useEffect, useMemo } from "react";
 import type { ToastProps, ToastType } from "../config/types";
 import { useToast } from "../hooks/useToast";
 
@@ -13,7 +13,7 @@ const Toast: React.FC<ToastProps> = ({
   autoClose = true,
 }) => {
   const { removeToast } = useToast();
-  const closeTime = 3000;
+  const closeTime = 2000;
 
   useEffect(() => {
     if (autoClose) {
@@ -67,13 +67,19 @@ const Toast: React.FC<ToastProps> = ({
 };
 
 const ToastContainer: React.FC<ToastContainerProps> = ({ messages }) => {
+  const memoizedToasts = useMemo(
+    () =>
+      messages.map((prop) => {
+        return <Toast key={prop.id} {...prop} />;
+      }),
+    [messages]
+  );
+
   return (
     <div className="fixed bottom-1 right-1 w-1/2 md:w-1/4 lg:w-1/6 flex flex-col-reverse gap-2">
-      {messages.map((prop, id) => {
-        return <Toast key={id} {...prop} />;
-      })}
+      {memoizedToasts}
     </div>
   );
 };
 
-export default ToastContainer;
+export default memo(ToastContainer);

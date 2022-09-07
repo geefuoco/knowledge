@@ -93,7 +93,7 @@ const Post: React.FC = () => {
               <CommentComponent
                 id={comment.id}
                 key={comment.id}
-                username={comment.user.username}
+                user={comment.user}
                 body={comment.body}
                 createdAt={comment.createdAt}
                 likes={comment._count?.likes}

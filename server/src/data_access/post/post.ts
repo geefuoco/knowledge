@@ -31,6 +31,7 @@ export function createPostPrisma(
             include: {
               user: {
                 select: {
+                  id: true,
                   username: true
                 }
               },
@@ -43,6 +44,7 @@ export function createPostPrisma(
           },
           user: {
             select: {
+              id: true,
               username: true
             }
           },
@@ -87,6 +89,7 @@ export function createPostPrisma(
         include: {
           user: {
             select: {
+              id: true,
               username: true
             }
           },
@@ -144,6 +147,7 @@ export function createPostPrisma(
             },
             user: {
               select: {
+                id: true,
                 username: true
               }
             }

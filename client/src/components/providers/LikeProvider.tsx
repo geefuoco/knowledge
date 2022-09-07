@@ -9,12 +9,12 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
+  const [likes, setLikes] = useState<Like[]>([]);
   const {
     loading,
     error,
     value: userLikes,
   } = useAsync(() => getUserLikes(user?.id || -1), [user?.id]);
-  const [likes, setLikes] = useState<Like[]>([]);
 
   useEffect(() => {
     if (userLikes) {
