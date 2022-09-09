@@ -1,8 +1,10 @@
+import { useRef, useEffect } from "react";
+
 type ModalProps = {
   title: string;
   buttonText?: string;
   children: React.ReactNode;
-  buttonCallback?: Function;
+  buttonCallback?: (() => undefined) | (() => Promise<void>);
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -15,6 +17,17 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const { current } = modalRef;
+      if (current) {
+        current.classList.remove("opacity-0");
+      }
+    }, 100);
+  }, [isOpen]);
+
   function handleOutsideClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       setIsOpen(false);
@@ -24,10 +37,13 @@ const Modal: React.FC<ModalProps> = ({
   return (
     (isOpen && (
       <div
-        className="absolute w-full bg-black/70 h-full flex justify-center items-center z-10"
+        className="absolute w-full bg-black/70 h-full flex justify-center z-10 "
         onClick={handleOutsideClick}
       >
-        <div className="flex flex-col rounded-md drop-shadow-sm bg-white max-w-md p-2">
+        <div
+          className="opacity-0 flex-col rounded-md drop-shadow-sm bg-white w-96 md:max-w-md p-2 mt-24 h-fit transition-all duration-150 ease-in-out"
+          ref={modalRef}
+        >
           <header className="basis-1/5 flex justify-between border-b border-b-gray-100 text-lg p-2 font-bold">
             {title}
             <span className="block">
@@ -44,7 +60,7 @@ const Modal: React.FC<ModalProps> = ({
             {buttonText && buttonCallback && (
               <button
                 className="bg-blue-600 hover:bg-blue-700 text-white text-md px-3 py-1 rounded-md"
-                onClick={buttonCallback()}
+                onClick={buttonCallback}
               >
                 {buttonText}
               </button>

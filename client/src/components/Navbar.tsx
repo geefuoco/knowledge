@@ -5,57 +5,11 @@ import { useToast } from "../hooks/useToast";
 import { createPost } from "../api/createPost";
 import Search from "./Search";
 import { useFeed } from "../hooks/useFeed";
-
-type ModalProps = {
-  textRef: React.ForwardedRef<HTMLTextAreaElement>;
-  createPost: () => Promise<void>;
-  showModal: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-const Modal: React.FC<ModalProps> = ({ textRef, createPost, showModal }) => {
-  function handleOutsideClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    if (e.target === e.currentTarget) {
-      showModal(false);
-    }
-  }
-
-  return (
-    <div
-      className="absolute w-full h-full bg-black/70 flex justify-center items-center"
-      onClick={handleOutsideClick}
-    >
-      <div className="container mx-auto lg:w-2/5 p-3">
-        <div className="flex justify-between">
-          <h2 className="font-bold text-xl text-white">New Post</h2>
-          <span
-            className="block font-bold text-white cursor-pointer hover:text-red-500"
-            onClick={() => showModal(false)}
-          >
-            X
-          </span>
-        </div>
-        <div>
-          <textarea ref={textRef} rows={4} className="w-full"></textarea>
-        </div>
-        <div>
-          <button
-            onClick={() => {
-              createPost();
-              showModal(false);
-            }}
-            className="py-2 px-4 bg-blue-500 rounded-sm text-white"
-          >
-            Create
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+import Modal from "./Modal";
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { user, onLogout } = useAuth();
   const { createToast } = useToast();
   const { addPost } = useFeed();
@@ -72,17 +26,20 @@ const Navbar: React.FC = () => {
         createToast("Error: Could not create post", "danger", false);
       }
     }
+    setIsOpen(false);
   }
 
   return (
     <>
-      {showModal && (
-        <Modal
-          textRef={textRef}
-          createPost={handleCreateNewPost}
-          showModal={setShowModal}
-        />
-      )}
+      <Modal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        title={"New Post"}
+        buttonText={"Create Post"}
+        buttonCallback={handleCreateNewPost}
+      >
+        <textarea ref={textRef} rows={4} className="w-full p-1"></textarea>
+      </Modal>
       <nav className="sticky top-0  text-white bg-slate-400">
         <div className="relative z-10 flex w-full h-full bg-slate-400 p-4">
           <div className="basis-1/3 flex-grow my-auto">
@@ -132,13 +89,13 @@ const Navbar: React.FC = () => {
                 </a>
                 <button
                   className="py-2 px-3 whitespace-nowrap itext-md bg-slate-600 rounded-lg"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => setIsOpen(true)}
                 >
                   New Post
                 </button>
                 <button
                   onClick={() => {
-                    setShowModal(false);
+                    setIsOpen(false);
                     onLogout();
                   }}
                   className="py-2 px-3 text-md bg-slate-600 rounded-lg"
@@ -180,7 +137,7 @@ const Navbar: React.FC = () => {
                   role="button"
                   className="block"
                   onClick={() => {
-                    setShowModal(!showModal);
+                    setIsOpen(!isOpen);
                     setShowDropdown(false);
                   }}
                 >
@@ -191,7 +148,7 @@ const Navbar: React.FC = () => {
                 <button
                   onClick={() => {
                     setShowDropdown(false);
-                    setShowModal(false);
+                    setIsOpen(false);
                     onLogout();
                   }}
                   className="block"

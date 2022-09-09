@@ -96,7 +96,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
         <section className="md:p-4 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5 border-t-gray-200 border-t-2">
           <section className="pb-2">
             <div className="flex gap-4 md:justify-between w-full">
-              <div className="basis-1/3 max-w-profile relative">
+              <div className="basis-1/3 max-w-profile">
                 <img
                   className="w-full cursor-pointer"
                   src={user?.avatar ?? "/images/default_avatar.png"}
