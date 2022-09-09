@@ -18,6 +18,9 @@ const Navbar: React.FC = () => {
   async function handleCreateNewPost() {
     const { current } = textRef;
     if (user && current) {
+      if (current.value === "") {
+        return;
+      }
       const post = await createPost(user.id, current.value);
       if (post && !("message" in post)) {
         addPost(post);

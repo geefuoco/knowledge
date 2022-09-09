@@ -18,7 +18,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const textRef = useRef<HTMLTextAreaElement | null>(null);
   const pRef = useRef<HTMLParagraphElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const profilePhotoRef = useRef<HTMLInputElement | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const {
@@ -28,23 +28,35 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
   } = useAsync(() => getUserPosts(userId), [userId]);
 
   function handleToggleModal() {
-    console.log("open");
     setIsOpen(true);
   }
 
   function handleToggleUpdate() {
     const form = formRef.current;
     const p = pRef.current;
-    const button = inputRef.current;
 
-    if (!p || !form || !button) {
+    if (!p || !form) {
       return;
     }
 
-    button.classList.toggle("hidden");
     p.classList.toggle("hidden");
     form.classList.toggle("hidden");
     form.classList.toggle("block");
+  }
+
+  async function handleChangeProfilePhoto() {
+    try {
+      const { current } = profilePhotoRef;
+      if (!current) {
+        return;
+      }
+      if (!current.value || current.value === "") {
+        createToast("Error: No photo provided", "warning", true);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function handleUpdateProfile(ev: FormEvent) {
@@ -86,11 +98,16 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
     <>
       <Modal
         buttonText={"Upload"}
+        buttonCallback={handleChangeProfilePhoto}
         title={"Change Profile Photo"}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >
-        <input type="file" accept="image/png, image/jpg" />
+        <input
+          ref={profilePhotoRef}
+          type="file"
+          accept="image/png, image/jpg"
+        />
       </Modal>
       <main className="flex flex-col gap-10">
         <section className="md:p-4 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5 border-t-gray-200 border-t-2">

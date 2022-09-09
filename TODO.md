@@ -3,12 +3,14 @@
 ### Client
 
 
-- upload images
-  - profile pictures
-  - posts with images ?
+[] upload images
+  [] profile pictures
+  [] posts with images ?
 
-- chatroom ?
+[] chatroom ?
 
 ## Bugs
 
-- autoclosed toasts are rendered twice
+[x] autoclosed toasts are rendered twice
+[] like count not showing correctly
+  - to reproduce: like a post. Go into the comments. Click back.

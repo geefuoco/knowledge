@@ -1,5 +1,5 @@
 import type { ToastProps, ToastType } from "../../config/types";
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { ToastContext } from "../../context/ToastContext";
 import ToastContainer from "../Toast";
 
@@ -15,7 +15,7 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
       type,
       autoClose,
     };
-    setToasts([toast, ...toasts]);
+    setToasts((toasts) => [toast, ...toasts]);
   }
 
   function removeToast(id: number) {
@@ -35,9 +35,9 @@ const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      <ToastContainer messages={toasts} />
+      <ToastContainer />
     </ToastContext.Provider>
   );
 };
 
-export default ToastProvider;
+export default memo(ToastProvider);
