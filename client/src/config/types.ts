@@ -33,6 +33,7 @@ export type Post = {
   user_id: number;
   user: User;
   body: string;
+  image?: string;
   createdAt: string;
   username?: string;
   comments: Comment[] | null;

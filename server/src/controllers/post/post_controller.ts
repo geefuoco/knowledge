@@ -39,7 +39,7 @@ export default function createPostController(
   }
 
   async function createPost(req: Request, res: Response) {
-    const { body, user_id } = req.body;
+    const { body, user_id, image } = req.body;
     if (!body || !user_id) {
       throw apiErrors.createInvalidRequestError();
     }
@@ -49,6 +49,7 @@ export default function createPostController(
     const createdAt = createTimestamp();
     const post = await Post.create({
       body,
+      image,
       user_id,
       createdAt
     });

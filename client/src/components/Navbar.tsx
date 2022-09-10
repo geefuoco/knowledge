@@ -2,26 +2,64 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useToast } from "../hooks/useToast";
-import { createPost } from "../api/createPost";
-import Search from "./Search";
 import { useFeed } from "../hooks/useFeed";
+import { createPost } from "../api/createPost";
+import { getSignedUrl } from "../api/getSignedUrl";
+import { config } from "../config/config";
+
+import Search from "./Search";
 import Modal from "./Modal";
 
 const Navbar: React.FC = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [uploadImage, setUploadImage] = useState("");
   const { user, onLogout } = useAuth();
   const { createToast } = useToast();
   const { addPost } = useFeed();
   const textRef = useRef<HTMLTextAreaElement | null>(null);
+  const uploadRef = useRef<HTMLInputElement | null>(null);
 
   async function handleCreateNewPost() {
     const { current } = textRef;
-    if (user && current) {
+    const uploadedImage = uploadRef.current;
+    if (user && current && uploadedImage) {
       if (current.value === "") {
         return;
       }
-      const post = await createPost(user.id, current.value);
+      const file = uploadedImage.files ? uploadedImage.files[0] : null;
+      let imageUrl: string | null = null;
+      if (file) {
+        const response = await getSignedUrl();
+        if (!response) {
+          createToast("Error: Could not upload image", "danger", true);
+          return;
+        }
+
+        const { url, fields } = response;
+        const data: { [key: string]: any } = {
+          ...fields,
+          "Content-Type": file.type,
+          file,
+        };
+
+        const formData = new FormData();
+
+        for (let name in data) {
+          formData.append(name, data[name]);
+        }
+
+        const bucketResponse = await fetch(url, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (bucketResponse.status === 204 || bucketResponse.status === 200) {
+          imageUrl = `https://${config.BUCKET}.s3.us-east-2.amazonaws.com/${fields.key}`;
+        }
+        //TODO: Test if this works
+      }
+      const post = await createPost(user.id, current.value, imageUrl);
       if (post && !("message" in post)) {
         addPost(post);
         createToast("Created post.", "success", true);
@@ -29,7 +67,20 @@ const Navbar: React.FC = () => {
         createToast("Error: Could not create post", "danger", false);
       }
     }
+    setUploadImage("");
     setIsOpen(false);
+  }
+
+  function handleUploadImage() {
+    const { current } = uploadRef;
+    if (!current) {
+      return;
+    }
+    const file = current.files ? current.files[0] : null;
+    if (!file) {
+      return;
+    }
+    setUploadImage(URL.createObjectURL(file));
   }
 
   return (
@@ -41,7 +92,28 @@ const Navbar: React.FC = () => {
         buttonText={"Create Post"}
         buttonCallback={handleCreateNewPost}
       >
-        <textarea ref={textRef} rows={4} className="w-full p-1"></textarea>
+        {uploadImage && (
+          <div className="mb-2 max-h-36 overflow-y-scroll relative z-0 border-2 border-gray-200 rounded-sm">
+            <span
+              className="sticky left-0 top-0"
+              onClick={() => {
+                setUploadImage("");
+                if (uploadRef.current && uploadRef.current.files) {
+                  uploadRef.current.value = "";
+                }
+              }}
+            >
+              <img src="/images/close-rectangle.svg" alt="X" />
+            </span>
+            <img className="w-full" src={uploadImage} alt="uploaded image" />
+          </div>
+        )}
+        <textarea
+          ref={textRef}
+          rows={4}
+          className="w-full p-1 border-black block"
+        ></textarea>
+        <input type="file" ref={uploadRef} onChange={handleUploadImage} />
       </Modal>
       <nav className="sticky top-0  text-white bg-slate-400">
         <div className="relative z-10 flex w-full h-full bg-slate-400 p-4">

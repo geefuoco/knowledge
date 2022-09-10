@@ -7,6 +7,7 @@ export type Post = {
 
 export type PostCreateInfo = {
   body: string;
+  image?: string;
   createdAt: Date;
   user_id: number;
 };

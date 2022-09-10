@@ -4,7 +4,7 @@
 
 
 [] upload images
-  [] profile pictures
+  [x] profile pictures
   [] posts with images ?
 
 [] chatroom ?

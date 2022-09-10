@@ -8,7 +8,16 @@ import { deletePost } from "../api/deletePost";
 
 import Like from "./Like";
 
-const PostItem: React.FC<Post> = ({ id, body, user, createdAt, _count }) => {
+//TODO: Show image in post if there is one
+
+const PostItem: React.FC<Post> = ({
+  id,
+  body,
+  user,
+  createdAt,
+  _count,
+  image,
+}) => {
   const { createToast } = useToast();
   const currentUser = useAuth().user;
   const { removePost } = useFeed();
@@ -19,6 +28,13 @@ const PostItem: React.FC<Post> = ({ id, body, user, createdAt, _count }) => {
   }
   const comments = _count?.comments;
   const likes = _count?.likes;
+
+  const imageDisplay = image && (
+    <div>
+      <img className="w-full max-h-36 p-1" src={image} alt="photo" />
+    </div>
+  );
+
   async function handleRemovePost() {
     try {
       const result = await deletePost(id);
@@ -37,7 +53,10 @@ const PostItem: React.FC<Post> = ({ id, body, user, createdAt, _count }) => {
         <div className="md:text-xl p-3 font-bold">{user.username}</div>
         <div className="p-3">{time}</div>
       </div>
-      <div className="text-l pl-3">{body}</div>
+      <div className="text-l pl-3">
+        {imageDisplay}
+        <p>{body}</p>
+      </div>
       <div className="flex justify-end gap-10">
         <div className="p-3 flex gap-3">
           <Like likes={likes ?? 0} type="post" parentId={id} />

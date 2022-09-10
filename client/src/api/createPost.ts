@@ -3,12 +3,14 @@ import { config } from "../config/config";
 
 export async function createPost(
   userId: number,
-  text: string
+  text: string,
+  imageUrl: string | null
 ): Promise<Post | null> {
   try {
     const data = {
       user_id: userId,
       body: text,
+      image: imageUrl,
     };
 
     const response = await fetch(`${config.SERVER}/api/v1/posts`, {
