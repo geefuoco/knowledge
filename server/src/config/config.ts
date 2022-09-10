@@ -33,5 +33,8 @@ export default {
   CLIENT: process.env.CLIENT || "http://192.168.2.210:3000",
   TEST_PORT: process.env.TEST_PORT || 6000,
   DATABASE_URL: process.env.DATABASE_URL,
-  SESSION_SECRET: process.env.SESSION_SECRET || "testing-session-secret"
+  SESSION_SECRET: process.env.SESSION_SECRET || "testing-session-secret",
+  AWS_KEY: process.env.AWS_S3_KEY,
+  AWS_S3_SECRET: process.env.AWS_S3_SECRET,
+  BUCKET: process.env.BUCKET_NAME
 };

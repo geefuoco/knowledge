@@ -1,4 +1,5 @@
 import type { Post } from "../config/types";
+import { config } from "../config/config";
 import { useAsync } from "../hooks/useAsync";
 import { getUserPosts } from "../api/getUserPosts";
 import { updateUser } from "../api/updateUser";
@@ -7,6 +8,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useToast } from "../hooks/useToast";
 import { FormEvent, useRef, useState } from "react";
 import Modal from "./Modal";
+import { getSignedUrl } from "../api/getSignedUrl";
 
 type ProfileProps = {
   userId: number;
@@ -19,6 +21,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
   const textRef = useRef<HTMLTextAreaElement | null>(null);
   const pRef = useRef<HTMLParagraphElement | null>(null);
   const profilePhotoRef = useRef<HTMLInputElement | null>(null);
+  const avatarRef = useRef<HTMLImageElement | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const {
@@ -47,11 +50,57 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
   async function handleChangeProfilePhoto() {
     try {
       const { current } = profilePhotoRef;
-      if (!current) {
+      const avatar = avatarRef.current;
+      if (!current || !avatar) {
         return;
       }
-      if (!current.value || current.value === "") {
+      const file = current.files ? current.files[0] : null;
+      if (!file) {
         createToast("Error: No photo provided", "warning", true);
+        return;
+      }
+      if (file.size > 3_500_000) {
+        createToast("Error: File too large. (Max 3.5Mb)", "danger", true);
+        return;
+      }
+      const signedUrl = await getSignedUrl();
+      if (!signedUrl) {
+        createToast("Error: Could not upload photo", "danger", true);
+        return;
+      }
+
+      const { url, fields } = signedUrl;
+
+      const data: { [key: string]: any } = {
+        ...fields,
+        "Content-Type": file.type,
+        file,
+      };
+
+      const formData = new FormData();
+
+      for (let name in data) {
+        formData.append(name, data[name]);
+      }
+
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.status === 204 || response.status === 200) {
+        if (auth.user) {
+          //NOTE: Since this is a profile photo, it should possibly be replacing the old photo -- perhaps use user email uuid?
+          const imageUrl = `https://${config.BUCKET}.s3.us-east-2.amazonaws.com/${fields.key}`;
+          const user = await updateUser({ id: auth.user.id, avatar: imageUrl });
+          if (user && "avatar" in user) {
+            avatar.src = imageUrl;
+            createToast("Updated avatar", "success", true);
+            setIsOpen(false);
+          }
+        }
+      } else {
+        createToast("Error: Could not upload photo", "danger", true);
         return;
       }
     } catch (error) {
@@ -117,6 +166,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
                 <img
                   className="w-full cursor-pointer"
                   src={user?.avatar ?? "/images/default_avatar.png"}
+                  ref={avatarRef}
                   alt="profile-photo"
                   onClick={handleToggleModal}
                 />

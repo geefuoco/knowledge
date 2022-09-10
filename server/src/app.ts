@@ -3,10 +3,15 @@ import helmet from "helmet";
 import cors from "cors";
 import { join } from "path";
 import { PrismaClient } from "@prisma/client";
+import AWS from "aws-sdk";
 
 import { createSessionMiddleware } from "./config/sessions";
 import { errorHandler, notFoundHandler } from "./errors/error_handler";
-import { createApiRouter, createPassportRouter } from "./routes/routes";
+import {
+  createApiRouter,
+  createPassportRouter,
+  createS3Router
+} from "./routes/routes";
 import { authenticateRoute, testingRoute } from "./controllers/helpers";
 import { createUserPrisma } from "./data_access/user/user";
 import { createPostPrisma } from "./data_access/post/post";
@@ -24,6 +29,12 @@ const corsOptions = {
   credentials: true
 };
 
+const s3 = new AWS.S3({
+  accessKeyId: config.AWS_KEY,
+  secretAccessKey: config.AWS_S3_SECRET,
+  region: "us-east-2"
+});
+
 const filter = createProfanityFilter();
 const User = createUserPrisma(client, filter);
 const Post = createPostPrisma(client, filter);
@@ -40,6 +51,7 @@ app.use(
   authenticateRoute,
   createApiRouter({ User, Post, Comment, Like })
 );
+app.use(createS3Router(s3));
 app.get("/", testingRoute);
 app.use(errorHandler);
 app.use(notFoundHandler);

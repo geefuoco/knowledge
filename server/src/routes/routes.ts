@@ -1,4 +1,6 @@
-import { Router, Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
+import config from "../config/config";
+import { Router, Request, Response, NextFunction } from "express";
 import type { UserRepository } from "../data_access/user/user_repository";
 import type { PostRepository } from "../data_access/post/post_repository";
 import type { CommentRepository } from "../data_access/comment/comment_repository";
@@ -73,5 +75,37 @@ export function createPassportRouter(User: UserRepository): Router {
 
   router.post("/logout", logoutUser);
   router.post("/register", userController.createUser);
+  return router;
+}
+
+export function createS3Router(s3: AWS.S3): Router {
+  const router = Router();
+
+  router.get(
+    "/get-signed-url",
+    authenticateRoute,
+    async (_: Request, res: Response, next: NextFunction) => {
+      s3.createPresignedPost(
+        {
+          Fields: {
+            key: uuidv4()
+          },
+          Conditions: [
+            ["starts-with", "$Content-Type", "image/"],
+            ["content-length-range", 0, 3_500_000]
+          ],
+          Expires: 60,
+          Bucket: config.BUCKET
+        },
+        (err, signed) => {
+          if (err) {
+            return next(err);
+          }
+          res.status(StatusCodes.OK).json(signed);
+        }
+      );
+    }
+  );
+
   return router;
 }
