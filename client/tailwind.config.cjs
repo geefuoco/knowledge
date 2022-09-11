@@ -7,6 +7,9 @@ module.exports = {
         profile: "90px",
       },
     },
+    screens: {
+      phone: "450px",
+    },
   },
   plugins: [],
 };

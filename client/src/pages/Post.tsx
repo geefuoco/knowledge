@@ -20,6 +20,12 @@ const Post: React.FC = () => {
 
   const time = dateFormatter.format(Date.parse(post.createdAt));
 
+  const imageDisplay = post.image && (
+    <div>
+      <img className="w-full max-h-36 p-1" src={post.image} alt="photo" />
+    </div>
+  );
+
   async function handleReply() {
     setShowReply(false);
     if (post && user) {
@@ -51,7 +57,10 @@ const Post: React.FC = () => {
           </div>
           <div className="pt-2 text-sm">{time}</div>
         </div>
-        <div className="text-l md:text-xl">{post.body}</div>
+        <div className="text-l md:text-xl">
+          {imageDisplay}
+          <p>{post.body}</p>
+        </div>
         <div className="flex justify-end p-2">
           <div className="px-2 flex gap-3">
             <Like

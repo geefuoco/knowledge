@@ -37,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({
   return (
     (isOpen && (
       <div
-        className="absolute w-full bg-black/70 h-full flex justify-center z-10 "
+        className="fixed top-0 left-0 w-full bg-black/70 h-full flex justify-center z-10 "
         onClick={handleOutsideClick}
       >
         <div

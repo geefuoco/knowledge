@@ -11,7 +11,11 @@ const Feed: React.FC = () => {
       return <PostItem key={post.id} {...post} />;
     });
 
-  return <main className="container lg:w-2/5 mx-auto ">{postsDisplay}</main>;
+  return (
+    <main className="container phone:w-5/6  md:w-3/5 lg:w-2/5 mx-auto ">
+      {postsDisplay}
+    </main>
+  );
 };
 
 export default Feed;

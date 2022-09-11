@@ -159,7 +159,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
         />
       </Modal>
       <main className="flex flex-col gap-10">
-        <section className="md:p-4 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5 border-t-gray-200 border-t-2">
+        <section className="md:p-4 phone:w-5/6 md:basis-2/3 lg:basis-2/5 container mx-auto lg:w-2/5 border-t-gray-200 border-t-2">
           <section className="pb-2">
             <div className="flex gap-4 md:justify-between w-full">
               <div className="basis-1/3 max-w-profile">
@@ -198,7 +198,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
                 >
                   <textarea rows={4} className="w-full p-2" ref={textRef} />
                   <button
-                    className="text-white bg-blue-600 px-2 py-1 rounded-md block ml-auto w-1/5"
+                    className="text-sm text-white bg-blue-600 px-2 py-1 rounded-md block ml-auto w-1/5"
                     type="submit"
                   >
                     Done

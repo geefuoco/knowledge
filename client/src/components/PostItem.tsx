@@ -7,6 +7,7 @@ import { useToast } from "../hooks/useToast";
 import { deletePost } from "../api/deletePost";
 
 import Like from "./Like";
+import ImagePost from "./ImagePost";
 
 const PostItem: React.FC<Post> = ({
   id,
@@ -27,11 +28,7 @@ const PostItem: React.FC<Post> = ({
   const comments = _count?.comments;
   const likes = _count?.likes;
 
-  const imageDisplay = image && (
-    <div>
-      <img className="w-full max-h-36 p-1" src={image} alt="photo" />
-    </div>
-  );
+  const imageDisplay = image && <ImagePost src={image} />;
 
   async function handleRemovePost() {
     try {
@@ -49,7 +46,11 @@ const PostItem: React.FC<Post> = ({
     <div className="pl-3 pt-3 shadow-md  bg-gray-200 border-b-2 border-b-gray-300">
       <div className="flex justify-between">
         <div className="md:text-xl p-3 font-bold">
-          <Link to={`/user/${user.id}`}>{user.username}</Link>
+          {user.id ? (
+            <Link to={`/user/${user.id}`}>{user.username}</Link>
+          ) : (
+            user.username
+          )}
         </div>
         <div className="p-3">{time}</div>
       </div>
