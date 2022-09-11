@@ -106,6 +106,4 @@ export type FeedContextType = {
   posts: Post[];
   addPost: (p: Post) => void;
   removePost: (id: number) => void;
-  pageNumber: number;
-  setPageNumber: (page: number) => void;
 };

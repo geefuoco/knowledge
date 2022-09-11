@@ -7,26 +7,20 @@ import { getPosts } from "../../api/getPosts";
 const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [pageNumber, setPageNumber] = useState<number>(1);
   const [posts, setPosts] = useState<Post[]>([]);
-  const { loading, error, value } = useAsync(
-    () => getPosts(pageNumber),
-    [pageNumber]
-  );
+  const { loading, error, value } = useAsync(() => getPosts(1), []);
 
   useEffect(() => {
     if (value) {
       setPosts(value);
     }
-  }, [value, pageNumber]);
+  }, [value]);
 
   const contextValue = useMemo(
     () => ({
       posts,
       addPost,
       removePost,
-      pageNumber,
-      setPageNumber,
     }),
     [posts]
   );
