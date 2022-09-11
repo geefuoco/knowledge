@@ -168,7 +168,11 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
                   src={user?.avatar ?? "/images/default_avatar.png"}
                   ref={avatarRef}
                   alt="profile-photo"
-                  onClick={handleToggleModal}
+                  onClick={
+                    auth.user?.id === userId
+                      ? handleToggleModal
+                      : () => undefined
+                  }
                 />
               </div>
               <div className="basis-2/3 flex-grow p-2 bg-gray-200 rounded-md">

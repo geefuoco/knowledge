@@ -8,8 +8,6 @@ import { deletePost } from "../api/deletePost";
 
 import Like from "./Like";
 
-//TODO: Show image in post if there is one
-
 const PostItem: React.FC<Post> = ({
   id,
   body,
@@ -50,7 +48,9 @@ const PostItem: React.FC<Post> = ({
   return (
     <div className="pl-3 pt-3 shadow-md  bg-gray-200 border-b-2 border-b-gray-300">
       <div className="flex justify-between">
-        <div className="md:text-xl p-3 font-bold">{user.username}</div>
+        <div className="md:text-xl p-3 font-bold">
+          <Link to={`/user/${user.id}`}>{user.username}</Link>
+        </div>
         <div className="p-3">{time}</div>
       </div>
       <div className="text-l pl-3">
