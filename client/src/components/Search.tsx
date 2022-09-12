@@ -1,7 +1,7 @@
 import { FormEvent, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Search: React.FC = () => {
+const Search: React.FC<{ callback?: () => void }> = ({ callback }) => {
   const navigate = useNavigate();
   const search = useRef<HTMLInputElement | null>(null);
 
@@ -30,6 +30,7 @@ const Search: React.FC = () => {
       <button
         className="p-2 rounded-md bg-blue-500 text-white transition ease-in hover:bg-blue-400"
         type="submit"
+        onClick={callback}
       >
         Search
       </button>

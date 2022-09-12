@@ -125,9 +125,9 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
         if (user && "bio" in user) {
           p.innerText = current.value;
           createToast("Profile updated", "success", true);
+        } else {
+          createToast("Error: Could not update", "danger", false);
         }
-      } else {
-        createToast("Error: Could not update", "danger", false);
       }
     } catch (error) {
       console.error(error);

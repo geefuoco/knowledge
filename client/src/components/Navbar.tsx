@@ -203,6 +203,9 @@ const Navbar: React.FC = () => {
           ) : (
             <>
               <div className="text-md font-bold p-4">
+                <Search callback={() => setShowDropdown(false)} />
+              </div>
+              <div className="text-md font-bold p-4">
                 <Link to="/profile" onClick={() => setShowDropdown(false)}>
                   Profile
                 </Link>

@@ -58,12 +58,19 @@ const PostItem: React.FC<Post> = ({
         {imageDisplay}
         <p>{body}</p>
       </div>
-      <div className="flex justify-end gap-10">
+      <div className="flex justify-end gap-20">
         <div className="p-3 flex gap-3">
           <Like likes={likes ?? 0} type="post" parentId={id} />
           <span className="font-semibold">
             <Link to={`/post/${id}`}>
-              Comments: {comments && comments > 0 ? comments : 0}
+              <span className="flex gap-1">
+                <img
+                  className="inline pt-1"
+                  src="/images/message.svg"
+                  alt="comments"
+                />
+                {comments && comments > 0 ? comments : 0}
+              </span>
             </Link>
           </span>
           {currentUser && currentUser.id === user.id && (

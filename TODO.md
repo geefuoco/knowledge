@@ -6,6 +6,8 @@
 - [x] upload images
   - [x] profile pictures
   - [x] posts with images ?
+  - [] remove profile photo
+  - [] crop image for profile photo
 
 - [x] infinite scroll
 
