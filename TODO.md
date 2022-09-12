@@ -7,7 +7,7 @@
   - [x] profile pictures
   - [x] posts with images ?
 
-- [] infinite scrollk
+- [x] infinite scroll
 
 - [] chatroom ?
   - [] notifications
