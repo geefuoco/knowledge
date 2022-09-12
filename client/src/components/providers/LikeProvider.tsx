@@ -13,6 +13,7 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
     return <>{children}</>;
   }
   const [likes, setLikes] = useState<Like[]>([]);
+
   const {
     loading,
     error,
@@ -63,6 +64,10 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
     result = <h1>{error}</h1>;
   } else {
     result = children;
+  }
+
+  if (!user) {
+    return <>{children}</>;
   }
 
   return (

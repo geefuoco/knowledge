@@ -45,6 +45,10 @@ const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
     );
   }
 
+  if (!user) {
+    return <>{children}</>;
+  }
+
   function addPost(post: Post) {
     setPosts([post, ...posts]);
   }
