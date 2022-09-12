@@ -2,11 +2,16 @@ import type { Post } from "../../config/types";
 import { useState, useEffect, useMemo } from "react";
 import { FeedContext } from "../../context/FeedContext";
 import { useAsync } from "../../hooks/useAsync";
+import { useAuth } from "../../hooks/useAuth";
 import { getPosts } from "../../api/getPosts";
 
 const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <>{children}</>;
+  }
   const [posts, setPosts] = useState<Post[]>([]);
   const { loading, error, value } = useAsync(() => getPosts(1), []);
 
