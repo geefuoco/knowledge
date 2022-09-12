@@ -106,4 +106,5 @@ export type FeedContextType = {
   posts: Post[];
   addPost: (p: Post) => void;
   removePost: (id: number) => void;
+  setPosts: React.Dispatch<React.SetStateAction<Post[]>>;
 };

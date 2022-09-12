@@ -1,48 +1,50 @@
 import type { Post } from "../config/types";
 import { useState, useEffect, useMemo } from "react";
 import { useFeed } from "../hooks/useFeed";
-import { useAsyncFn } from "../hooks/useAsync";
+import { useAsync } from "../hooks/useAsync";
 import { getPosts } from "../api/getPosts";
 import PostItem from "../components/PostItem";
 
 const Feed: React.FC = () => {
-  const { posts } = useFeed();
-  const [allPosts, setAllPosts] = useState(posts);
+  const { posts, setPosts } = useFeed();
   const [pageNumber, setPageNumber] = useState(2);
-  const { value, execute } = useAsyncFn(
+  const [canScroll, setCanScroll] = useState(false);
+  const { value: newPosts } = useAsync(
     () => getPosts(pageNumber),
     [pageNumber]
   );
 
   useEffect(() => {
+    if (posts.length >= 20) {
+      setCanScroll(true);
+    } else {
+      setCanScroll(false);
+    }
+  }, [posts]);
+
+  useEffect(() => {
     function handleNewPage() {
-      if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
-        console.log("hit the bottom");
-        if (posts.length >= 20) {
-          console.log("value ", value);
-          console.log(pageNumber);
-          setPageNumber((page) => page + 1);
-          execute();
-        }
+      if (
+        window.innerHeight + window.scrollY >= document.body.scrollHeight &&
+        canScroll &&
+        newPosts &&
+        newPosts.length
+      ) {
+        setPageNumber((page) => page + 1);
+        setPosts((old) => [...old, ...newPosts]);
       }
     }
 
     window.addEventListener("scroll", handleNewPage);
-    if (value && value.length) {
-      setAllPosts((old) => [...old, ...value]);
-    } else {
-      setAllPosts(posts);
-    }
-
     return () => window.removeEventListener("scroll", handleNewPage);
-  }, [posts, pageNumber]);
+  }, [newPosts]);
 
   const postsDisplay = useMemo(
     () =>
-      allPosts.map((post: Post) => {
+      posts.map((post: Post) => {
         return <PostItem key={post.id} {...post} />;
       }),
-    [allPosts]
+    [posts]
   );
 
   return (

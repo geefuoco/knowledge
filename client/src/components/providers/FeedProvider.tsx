@@ -21,6 +21,7 @@ const FeedProvider: React.FC<{ children: React.ReactNode }> = ({
       posts,
       addPost,
       removePost,
+      setPosts,
     }),
     [posts]
   );

@@ -5,4 +5,5 @@ export const FeedContext = createContext<FeedContextType>({
   posts: [],
   addPost: (post: Post) => undefined,
   removePost: () => undefined,
+  setPosts: () => undefined,
 });
