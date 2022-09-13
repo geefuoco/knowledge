@@ -11,7 +11,7 @@
     "lint": "eslint src --ext .ts --fix",
     "build": "tsc",
     "watch": "tsc --watch",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/server.ts"
   },
   "keywords": [],
   "author": "Gianluca Fuoco",
