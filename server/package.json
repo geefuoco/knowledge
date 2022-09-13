@@ -10,6 +10,7 @@
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "lint": "eslint src --ext .ts --fix",
     "build": "tsc",
+    "postbuild": "cp ./src/config/banned_words.txt ./build/config/",
     "watch": "tsc --watch",
     "start": "ts-node src/server.ts"
   },

@@ -1,0 +1,8 @@
+client/.env
+client/node_modules
+client/.env*
+
+server/__tests__
+server/.env*
+server/setup
+server/node_modules
