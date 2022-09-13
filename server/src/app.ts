@@ -56,12 +56,4 @@ app.get("/", testingRoute);
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(join(__dirname, "/dist")));
-
-  app.get("*", (_, res: Response) => {
-    res.sendFile(join(__dirname, "dist", "index.html"));
-  });
-}
-
 export default app;
