@@ -9,9 +9,6 @@ const LikeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const { user } = useAuth();
-  if (!user) {
-    return <>{children}</>;
-  }
   const [likes, setLikes] = useState<Like[]>([]);
 
   const {
