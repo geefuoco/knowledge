@@ -9,10 +9,11 @@
     "get-types": "typesync && npm i",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "lint": "eslint src --ext .ts --fix",
+    "prebuild": "cd ../client/ && npm run build && cd ../server && cp -r ../client/dist ./ && rm -rf build",
     "build": "tsc",
-    "postbuild": "cp ./src/config/banned_words.txt ./build/config/",
+    "postbuild": "cp ./src/config/banned_words.txt ./build/config/ && mv ./dist ./build/dist",
     "watch": "tsc --watch",
-    "start": "ts-node src/server.ts"
+    "start": "npm run build && NODE_ENV=production node build/server.js"
   },
   "keywords": [],
   "author": "Gianluca Fuoco",

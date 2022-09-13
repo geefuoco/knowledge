@@ -165,6 +165,7 @@ const Profile: React.FC<ProfileProps> = ({ userId }) => {
               <div className="basis-1/3 max-w-profile">
                 <img
                   className="w-full cursor-pointer"
+                  crossOrigin="anonymous"
                   src={user?.avatar ?? "/images/default_avatar.png"}
                   ref={avatarRef}
                   alt="profile-photo"

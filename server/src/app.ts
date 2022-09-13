@@ -12,7 +12,7 @@ import {
   createPassportRouter,
   createS3Router
 } from "./routes/routes";
-import { authenticateRoute, testingRoute } from "./controllers/helpers";
+import { authenticateRoute } from "./controllers/helpers";
 import { createUserPrisma } from "./data_access/user/user";
 import { createPostPrisma } from "./data_access/post/post";
 import { createLikePrisma } from "./data_access/like/like";
@@ -23,7 +23,7 @@ const app = express();
 const client = new PrismaClient();
 
 const corsOptions = {
-  origin: config.CLIENT,
+  origin: [config.CLIENT, "http://localhost:5000", "http://192.168.2.210:3000"],
   methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
   optionsSuccessStatus: 204,
   credentials: true
@@ -41,7 +41,20 @@ const Post = createPostPrisma(client, filter);
 const Comment = createCommentPrisma(client, filter);
 const Like = createLikePrisma(client);
 
-app.use(helmet());
+if (process.env.NODE_ENV === "production") {
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          "img-src": `'self' https://${config.BUCKET}.s3.us-east-2.amazonaws.com/`
+        }
+      },
+      crossOriginEmbedderPolicy: false
+    })
+  );
+} else {
+  app.use(helmet());
+}
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(createSessionMiddleware(client));
@@ -52,16 +65,16 @@ app.use(
   createApiRouter({ User, Post, Comment, Like })
 );
 app.use(createS3Router(s3));
-app.get("/", testingRoute);
-app.use(errorHandler);
-app.use(notFoundHandler);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(join(__dirname, "/dist")));
 
-  app.get("*", (_, res: Response) => {
+  app.get("/*", (_, res: Response) => {
     res.sendFile(join(__dirname, "dist", "index.html"));
   });
 }
+
+app.use(errorHandler);
+app.use(notFoundHandler);
 
 export default app;
