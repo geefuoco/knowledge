@@ -55,19 +55,3 @@ export function authenticateRoute(
   }
   return next(apiErrors.createUnauthorizedError());
 }
-
-export async function testingRoute(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    if (req.isAuthenticated()) {
-      res.status(StatusCodes.OK).send("<h1>Authorized Root Route</h1>");
-    } else {
-      res.status(StatusCodes.UNAUTHORIZED).send("<h1>Root Route</h1>");
-    }
-  } catch (error) {
-    next(error);
-  }
-}
