@@ -22,7 +22,7 @@ const Post: React.FC = () => {
 
   const imageDisplay = post.image && (
     <div>
-      <img className="w-full max-h-36 p-1" src={post.image} alt="photo" />
+      <img className="w-fit p-1" src={post.image} alt="uploaded photo" />
     </div>
   );
 
