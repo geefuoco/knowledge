@@ -9,6 +9,7 @@
     "get-types": "typesync && npm i",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "lint": "eslint src --ext .ts --fix",
+    "postinstall": "prisma generate",
     "prebuild": "cd ../client/ && npm run build && cd ../server && cp -r ../client/dist ./ && rm -rf build",
     "build": "tsc",
     "postbuild": "cp ./src/config/banned_words.txt ./build/config/ && mv ./dist ./build/dist",
