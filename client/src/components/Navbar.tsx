@@ -57,7 +57,6 @@ const Navbar: React.FC = () => {
         if (bucketResponse.status === 204 || bucketResponse.status === 200) {
           imageUrl = `https://${config.BUCKET}.s3.us-east-2.amazonaws.com/${fields.key}`;
         }
-        //TODO: Test if this works
       }
       const post = await createPost(user.id, current.value, imageUrl);
       if (post && !("message" in post)) {

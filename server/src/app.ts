@@ -46,7 +46,8 @@ if (process.env.NODE_ENV === "production") {
     helmet({
       contentSecurityPolicy: {
         directives: {
-          "img-src": `'self' https://${config.BUCKET}.s3.us-east-2.amazonaws.com/`
+          "connect-src": `'self' https://s3.us-east-2.amazonaws.com/${config.BUCKET}`,
+          "img-src": `'self' blob: https://${config.BUCKET}.s3.us-east-2.amazonaws.com/`
         }
       },
       crossOriginEmbedderPolicy: false
