@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, Link } from "react-router-dom";
 import Form, { FormErrors } from "../components/Form";
 import TextInput from "../components/Input";
 import { useAuth } from "../hooks/useAuth";
@@ -82,7 +82,13 @@ const Login: React.FC = () => {
             name="password"
           />
         </div>
-        {errors && (
+        <Link
+          className="text-blue-500 text-sm text-right"
+          to="/forgot-password"
+        >
+          Forgot password?
+        </Link>
+        {Object.keys(errors).length > 0 && (
           <span className="text-red-500 font-bold">{errors["message"]}</span>
         )}
         <button
