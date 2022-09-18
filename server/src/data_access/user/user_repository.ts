@@ -6,6 +6,7 @@ export type User = {
   bio?: string | null;
   avatar?: string | null;
   createdAt?: Date;
+  token?: string | null;
 };
 
 export type UserCreateInfo = {
@@ -20,6 +21,8 @@ export type UserCreateInfo = {
 export type UserUpdateInfo = {
   bio?: string | null;
   avatar?: string | null;
+  token?: string | null;
+  password?: string | null;
 };
 
 export type UserResult = Promise<User | null>;
@@ -38,4 +41,7 @@ export type UserRepository = {
   deleteById: (id: number) => UserResult;
   deleteAll: () => Promise<{ count: number } | null>;
   login: (email: string, password: string) => UserResult;
+  findByToken: (token: string) => UserResult;
+  updateUserToken: (id: number, token: string) => UserResult;
+  updateUserPassword: (id: number, password: string) => UserResult;
 };

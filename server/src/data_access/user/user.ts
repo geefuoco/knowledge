@@ -50,6 +50,24 @@ export function createUserPrisma(
     return null;
   }
 
+  async function findByToken(token: string): UserResult {
+    try {
+      return await prisma.user.findFirst({
+        where: {
+          token
+        },
+        select: {
+          id: true,
+          username: true,
+          email: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   async function findByIdWithPosts(id: number): UserResult {
     try {
       return await prisma.user.findFirst({
@@ -271,6 +289,43 @@ export function createUserPrisma(
     return null;
   }
 
+  async function updateUserToken(id: number, token: string): UserResult {
+    try {
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          token
+        }
+      });
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
+  async function updateUserPassword(id: number, password: string): UserResult {
+    try {
+      const salt = await bcrypt.genSalt(SALT);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const user = await prisma.user.update({
+        where: {
+          id
+        },
+        data: {
+          password: hashedPassword,
+          token: null
+        }
+      });
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
+
   return Object.freeze({
     findById,
     findAll,
@@ -285,6 +340,9 @@ export function createUserPrisma(
     deleteById,
     deleteAll,
     login,
-    updateUser
+    updateUser,
+    updateUserToken,
+    updateUserPassword,
+    findByToken
   });
 }

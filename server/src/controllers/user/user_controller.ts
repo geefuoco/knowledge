@@ -8,6 +8,8 @@ import {
 } from "../helpers";
 import apiErrors, { StatusCodes } from "../../errors/api_errors";
 import config from "../../config/config";
+import { sendPasswordResetEmail } from "../../config/mailer";
+import { v4 as uuid } from "uuid";
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -21,6 +23,8 @@ export type UserController = {
   loginUser: ExpressCallback;
   updateUser: ExpressCallback;
   getUserLikes: ExpressCallback;
+  resetPassword: ExpressCallback;
+  updatePassword: ExpressCallback;
 };
 
 export default function createUserController(
@@ -131,6 +135,42 @@ export default function createUserController(
     res.status(StatusCodes.OK).json(user);
   }
 
+  async function resetPassword(req: Request, res: Response) {
+    const { email } = req.body;
+    const valid = isValidEmail(email);
+    if (!valid) {
+      throw apiErrors.createInvalidEmailError();
+    }
+    const user = await User.findByEmail(email);
+    if (!user) {
+      throw apiErrors.createBadInputError();
+    }
+    const resetToken = uuid();
+    const success = await sendPasswordResetEmail(
+      user.email as string,
+      resetToken
+    );
+    if (success) {
+      await User.updateUserToken(user.id as number, resetToken);
+      res.status(StatusCodes.OK).json({ success, email });
+    } else {
+      res.status(StatusCodes.BAD_REQUEST).end();
+    }
+  }
+
+  async function updatePassword(req: Request, res: Response) {
+    const { password, token } = req.body;
+    const user = await User.findByToken(token);
+    if (!user) {
+      throw apiErrors.createBadInputError();
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      throw apiErrors.createInvalidPasswordLength();
+    }
+    await User.updateUserPassword(user.id as number, password);
+    res.status(StatusCodes.NO_CONTENT).end();
+  }
+
   function validateInput(req: Request) {
     const { email, password, username, avatar, bio } = req.body;
 
@@ -188,6 +228,8 @@ export default function createUserController(
     createUser: expressWrapper(createUser),
     deleteUser: expressWrapper(deleteUser),
     loginUser: expressWrapper(loginUser),
-    updateUser: expressWrapper(updateUser)
+    updateUser: expressWrapper(updateUser),
+    updatePassword: expressWrapper(updatePassword),
+    resetPassword: expressWrapper(resetPassword)
   });
 }

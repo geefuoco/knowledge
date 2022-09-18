@@ -13,6 +13,8 @@ export default function createUserRouter(
   router.get("/user/:id/likes", userController.getUserLikes);
   router.post("/user/search", userController.searchUsers);
   router.delete("/user/:id", userController.deleteUser);
+  router.post("/user/reset-password", userController.resetPassword);
+  router.post("/user/update-password", userController.updatePassword);
 
   return router;
 }
