@@ -32,6 +32,14 @@ type Repositories = {
   Like: LikeRepository;
 };
 
+export function createUpdatePasswordRouter(User: UserRepository): Router {
+  const userController = createUserController(User);
+  const router = Router();
+  router.post("/api/v1/user/reset-password", userController.resetPassword);
+  router.post("/api/v1/user/update-password", userController.updatePassword);
+  return router;
+}
+
 export function createApiRouter(repositories: Repositories): Router {
   const router = Router();
   const { User, Post, Comment, Like } = repositories;

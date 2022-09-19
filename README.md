@@ -5,6 +5,7 @@ ___
 
 A social media crud application built with React-Typescript, styled with tailwindcss
 
+View it [live](https://knowledge.up.railway.app)
 
 #### Features
 - Toast notifications

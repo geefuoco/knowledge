@@ -18,8 +18,6 @@ export function createProfanityFilter(): ProfanityFilter {
       word = word.toLowerCase();
       if (text === word || text.includes(word)) {
         result = true;
-        console.log("text: ", text);
-        console.log("bad word: ", word);
         break;
       }
     }
@@ -37,5 +35,6 @@ export default {
   AWS_KEY: process.env.AWS_S3_KEY,
   AWS_S3_SECRET: process.env.AWS_S3_SECRET,
   BUCKET: process.env.BUCKET_NAME,
-  MAIL_PASS: process.env.MAIL_PASS
+  MAIL_PASS: process.env.MAIL_PASS,
+  MAIL_USER: process.env.MAIL_USER
 };

@@ -1,7 +1,7 @@
 import config from "./config";
 import { createTransport } from "nodemailer";
 
-const sender = "knowledge.social@outlook.com";
+const sender = config.MAIL_USER;
 
 export const transporter = createTransport({
   service: "hotmail",
@@ -58,14 +58,16 @@ export async function sendPasswordResetEmail(
       subject: "Reset Password - Knowledge Social Media",
       html: generateHtml(token)
     };
-
     const info = await transporter.sendMail(mailOptions);
-    console.log(info);
+    console.log("Mailing info: ", info);
     if (info.response.includes("OK")) {
       return true;
+    } else {
+      console.log("Error: Email did not send");
     }
     return false;
   } catch (error) {
+    console.error(error);
     return false;
   }
 }

@@ -8,7 +8,6 @@ export async function getPasswordResetToken(
       `${config.SERVER}/api/v1/user/reset-password`,
       {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

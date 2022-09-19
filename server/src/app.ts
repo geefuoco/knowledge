@@ -10,7 +10,8 @@ import { errorHandler, notFoundHandler } from "./errors/error_handler";
 import {
   createApiRouter,
   createPassportRouter,
-  createS3Router
+  createS3Router,
+  createUpdatePasswordRouter
 } from "./routes/routes";
 import { authenticateRoute } from "./controllers/helpers";
 import { createUserPrisma } from "./data_access/user/user";
@@ -60,6 +61,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(createSessionMiddleware(client));
 app.use(createPassportRouter(User));
+app.use(createUpdatePasswordRouter(User));
 app.use(
   "/api/v1",
   authenticateRoute,

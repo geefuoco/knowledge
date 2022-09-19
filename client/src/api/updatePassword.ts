@@ -9,7 +9,6 @@ export async function updatePassword(
       `${config.SERVER}/api/v1/user/update-password`,
       {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
